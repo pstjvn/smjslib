@@ -1,0 +1,236 @@
+{namespace smstb.template}
+
+/**
+ * Base template
+ */
+{template .base}
+  <div></div>
+{/template}
+
+
+/**
+ * The base template for the relax center application.
+ * Requires external template!
+ * @param lines How many lines to be there in the display at a time.
+ */
+{template .relaxcenter}
+  <div class="{css container}">
+    <div class="{css image-rotation}"></div>
+    {call pstj.templates.pager}
+      {param itemsCount: $lines /}
+    {/call}
+  </div>
+{/template}
+
+
+/**
+ * The template for the fitness app.
+ * @param lines How many lines to be there in the list.
+ */
+{template .fitnessapp}
+  {call .relaxcenter data="all" /}
+  {call .playeroptions /}
+  {call .errordialog /}
+{/template}
+
+/**
+ *
+ */
+{template .LongaRecordItem}
+  <div class="{css longa-redord-item} {css table-view-item}">
+    <div class="{css table-view-item-content}">
+      <div class="{css longa-record-title}" data-model="publishName"></div>
+    </div>
+    <div class="{css table-view-item-overlay}"></div>
+  </div>
+{/template}
+
+
+/**
+ * The player configuration options.
+ * It is an NG template as well.
+ */
+{template .playerConfig}
+  <div class="{css player-options-container}">
+    <div class="{css player-options-playback-list}" data-model="mode"></div>
+    <div class="{css player-start}"></div>
+    <div class="{css player-cancel}"></div>
+  </div>
+{/template}
+
+/**
+ * Provides translateble string for the options of the player.
+ */
+{template .playerOptions}
+  {msg desc="Player playback option"}Play{/msg}|
+  {msg desc="Player playback option"}Repeat{/msg}|
+  {msg desc="Player playback option"}Repeat all{/msg}|
+  {msg desc="Player playback option"}Shuffle all{/msg}|
+  {msg desc="Player playback option"}All (No cam){/msg}
+{/template}
+
+/**
+ * Provides the inline list dom structure.
+ */
+{template .inlinelist}
+  <div class="{css tv-inline-list-button}">
+    <span class="{css tv-inline-list-navigate} {css left-arrow}" data-dir="left"></span>
+    <span class="{css tv-inline-list-value}" data-model="text"></span>
+    <span class="{css tv-inline-list-navigate} {css right-arrow}" data-dir="right"></span>
+  </div>
+{/template}
+
+/**
+ * Test
+ */
+{template .xxx}
+  <div class="{css tvcont} {css fill}">
+    <div class="{css tvcont} {css decorate} {css top-panel}" data-o10n="horizontal">
+      <div class="{css tvcont} {css decorate} {css left-panel}">
+        <div class="{css tvc} {css decorate} {css fill} {css focusme}" data-fm="true"></div>
+      </div>
+      <div class="{css tvcont} {css decorate} {css right-panel}">
+        <div class="{css tvc} {css vertical-two} {css decorate}" data-fm="true"></div>
+        <div class="{css tvc} {css vertical-two} {css decorate}" data-fm="true"></div>
+      </div>
+    </div>
+    <div class="{css tvcont} {css decorate} {css bottom-panel}" data-o10n="horizontal">
+      <div class="{css tvc} {css fill} {css decorate}"></div>
+    </div>
+  </div>
+{/template}
+
+/**
+ * Provides the template for the player configuration options.
+ * Internally it will require the inline list
+ */
+{template .playeroptions}
+  <div class="{css player-dialog} {css dialog-container} {css decorate}">
+    <div class="{css tvc} {css tvc-disabled} {css decorate} {css dialog-title}">
+      {msg desc="label"}Configure playback{/msg}
+    </div>
+    <div class="{css tv-inline-list} {css decorate} {css focusme}" data-fm="true"></div>
+    <div class="{css tvcont} {css decorate}" data-o10n="h" data-rw="true" style="text-align:right;">
+      <div class="{css tv-button} {css decorate} {css focusme}" data-action="ok" data-fm="true">OK</div>
+      <div class="{css tv-button} {css decorate}" data-action="cancel" data-fm="true">Cancel</div>
+    </div>
+  </div>
+{/template}
+
+
+/**
+ * Error diloag
+ */
+{template .errordialog}
+  <div class="{css error-dialog} {css dialog-container} {css decorate}">
+    <div class="{css tvc} {css tvc-disabled} {css decorate} {css dialog-title}">
+      {msg desc="label"}Error occured{/msg}
+    </div>
+    <div class="{css tvc} {css tvc-disabled} {css decorate} {css dialog-message}"></div>
+    <div class="{css tv-button} {css decorate} {css focusme}" style="float:right">{msg desc="label"}OK{/msg}</div>
+    <div style="clear:both"></div>
+  </div>
+{/template}
+
+/** Template for the notification component */
+{template .notification}
+  <div class="{css notifications}">
+    <div class="{css notification-content}" data-model="text"></div>
+  </div>
+{/template}
+
+/**
+ * Error message when error occured while loading.
+ */
+{template .errorwhileloading}
+  {msg desc="error text"}Unable to load the content, please try again later.{/msg}
+{/template}
+
+/**
+ * Error message when list is empty
+ */
+{template .errorwhenlistempty}
+  {msg desc="error text"}There seem to be no available items on the thumbdrive. Please make sure the drive is attached properly and try again.{/msg}
+{/template}
+
+/** BEGIN MOBILETV TEMPLATES **/
+
+
+/**
+  * The template for an item in the listing.
+  * @param type The type of the object.
+  * @param thumbnail The thumbnail to use for the item.
+  * @param title The title of the item.
+  * @param description The description of the item.
+  * @param cost The cost of the item.
+  * @param currency The currency of the cost.
+  * @param isdir If the item is a directory.
+  */
+{template .mobileItem}
+  <div class="{css stream-item}">
+    <div class="{css type}">{$type}</div>
+    <div class="{css image}"><img src="{$thumbnail}" alt="channel thumbnail" class="{css poster}"></div>
+    <div class="{css title}">{$title}</div>
+    <div class="{css description}">{$description}</div>
+    {if $cost != 0}
+      <div class="{css price}">
+        <span>{msg desc="Price label"}Price{/msg}:{sp}</span>
+        <span >{$cost}</span>{sp}<span>{$currency}</span>
+      </div>
+    {/if}
+    {if $isdir != true}
+      <div class="{css epg-guide}">{msg desc="Guide"}Guide{/msg}</div>
+    {/if}
+  </div>
+{/template}
+
+/**
+ * Provides the template for NSTableView item in the context of our mobiletv app
+ */
+{template .PlayableListItem}
+  <div class="{css playable-list-item}">
+    <div class="{css type}" data-model="type"></div>
+    <div class="{css image}">
+      <img src="" data-urlname="thumbnail" alt="channel thumbnail" class="{css poster}">
+    </div>
+    <div class="{css title}" data-model="publishName"></div>
+    <div class="{css description}" data-model="description"></div>
+    <div class="{css price}" data-model="cost" data-switch data-filter="DisplayIfLargerThanZero">
+      <span>{msg desc="Price label"}Price{/msg}:{sp}</span>
+      <span data-model="cost"></span>{sp}
+      <span data-model="currency"></span>
+    </div>
+    <div class="{css epg-guide}" data-model="isDir" data-switch data-filter="ngDisplayIfFalse">
+      {msg desc="Guide"}Guide{/msg}
+    </div>
+  </div>
+{/template}
+
+/**
+ * Provides the simple epg list item template (inline template).
+ * @param start The start hour:minute of the item.
+ * @param title The name of the program.
+ * @param description The program description.
+ * @param delimiter The day it is starting, formatted appropriately or an ampty string.
+ */
+{template .epgitem}
+  <div class="{css epg-list-item}
+    {if $delimiter != ''}
+      {sp}{css epg-delimiter}
+    {/if}
+    ">
+    <div class="{css epg-item-start-time}">{$start}</div>
+    <div class="{css epg-item-name}">{$title}</div>
+    {if $delimiter != ''}
+      <div class="{css epg-item-date}">{$delimiter}</div>
+    {/if}
+    <div class="{css epg-more}">
+      <div class="{css epg-item-desc}">
+        <strong>{$title}</strong>:{sp}{$description}
+        <div class="{css epg-add-button}">{msg desc="Epg add label on button"}Add to queue{/msg}</div>
+      </div>
+
+    </div>
+  </div>
+{/template}
+
