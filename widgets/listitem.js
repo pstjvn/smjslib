@@ -9,6 +9,7 @@ goog.provide('smstb.widget.ListItem.Action');
 goog.provide('smstb.widget.ListItemRenderer');
 
 goog.require('goog.dom');
+goog.require('goog.string');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Control');
 goog.require('pstj.configure');
@@ -65,14 +66,25 @@ _.getTemplate = function(control) {
 };
 
 
+_.getThumbnail_ = function(control) {
+  var thumb = control.getModel().getProp(smstb.ds.Record.Property.THUMBNAIL);
+  if (goog.string.isEmpty(thumb)) {
+    if (control.getModel().getProp(smstb.ds.Record.Property.ISDIR)) {
+      thumb = this.defaultFolderThumbnail;
+    } else {
+      thumb = this.defaultThumbnail;
+    }
+  }
+  return thumb;
+};
+
 /** @inheritDoc */
 _.generateTemplateData = function(control) {
   return {
     title: control.getModel().getProp(smstb.ds.Record.Property.NAME),
     description: control.getModel().getProp(smstb.ds.Record.Property.DESC),
     type: control.getModel().getProp(smstb.ds.Record.Property.TYPE),
-    thumbnail: control.getModel().getProp(
-        smstb.ds.Record.Property.THUMBNAIL) || this.defaultThumbnail,
+    thumbnail: this.getThumbnail_(control),
     cost: control.getModel().getProp(smstb.ds.Record.Property.COST),
     currency: control.getModel().getProp(smstb.ds.Record.Property.CURRENCY),
     isdir: control.getModel().getProp(smstb.ds.Record.Property.ISDIR)
@@ -90,6 +102,11 @@ _.getCssClass = function() {
 _.createDom = function(control) {
   return /** @type {Element} */ (goog.dom.htmlToDocumentFragment(
       this.getTemplate(control)));
+};
+
+/** @inheritDoc */
+_.getKeyEventTarget = function() {
+  return null;
 };
 
 });  // goog.scope
