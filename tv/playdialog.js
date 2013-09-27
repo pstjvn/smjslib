@@ -6,7 +6,6 @@ goog.require('smstb.player.config');
 goog.require('smstb.tv.Button');
 goog.require('smstb.tv.Container');
 goog.require('smstb.tv.ContainerRenderer');
-// we know that the player dialog needs the button and inlinelist component.
 goog.require('smstb.tv.InlineList');
 goog.require('smstb.tv.decorator');
 
