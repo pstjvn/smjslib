@@ -9,21 +9,6 @@
 
 
 /**
- * The base template for the relax center application.
- * Requires external template!
- * @param lines How many lines to be there in the display at a time.
- */
-{template .relaxcenter}
-  <div class="{css container}">
-    <div class="{css image-rotation}"></div>
-    {call pstj.templates.pager}
-      {param itemsCount: $lines /}
-    {/call}
-  </div>
-{/template}
-
-
-/**
  * The template for the fitness app.
  * @param lines How many lines to be there in the list.
  */
@@ -31,18 +16,6 @@
   {call .relaxcenter data="all" /}
   {call .playeroptions /}
   {call .errordialog /}
-{/template}
-
-/**
- *
- */
-{template .LongaRecordItem}
-  <div class="{css longa-redord-item} {css table-view-item}">
-    <div class="{css table-view-item-content}">
-      <div class="{css longa-record-title}" data-model="publishName"></div>
-    </div>
-    <div class="{css table-view-item-overlay}"></div>
-  </div>
 {/template}
 
 
