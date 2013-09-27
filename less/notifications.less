@@ -1,0 +1,21 @@
+
+.notification (@zindex: 9999; @padding: 5px) {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: @zindex;
+  text-align: center;
+  padding: @padding;
+  &.active {
+    display: block;
+  }
+}
+
+.notification-content (@notificationcolor: #fff1ad) {
+  background-color: @notificationcolor;
+  border: 2px solid darken(@notificationcolor, 20%);
+  display: inline-block;
+  padding: 5px 10px;
+}
