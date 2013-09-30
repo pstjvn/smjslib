@@ -80,6 +80,7 @@ _.setModel = function(model) {
  * path that has issues on the mobile when rasterzing the images.
  */
 _.showImages = function() {
+  if (!this.hasHiddenImages_) return;
   var url = '';
   if (!goog.isNull(this.getModel())) {
     url = this.getModel().getProp(this.imageSource_);
