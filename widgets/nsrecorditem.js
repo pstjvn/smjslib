@@ -70,10 +70,13 @@ var _ = smstb.widget.NSRecordItem.prototype;
 _.setModel = function(model) {
   goog.base(this, 'setModel', model);
   this.hasHiddenImages_ = true;
-  goog.dom.classlist.enable(this.imageTag_, goog.getCssName(
-      'smstb-hidden-image'), true);
+  this.setImageVisible(false);
 };
 
+
+_.setImageVisible = function(visible) {
+  this.imageTag_.style.opacity = (visible) ? 1 : 0;
+};
 
 /**
  * Shows the image currently set in the model. This is to divert the rendering
@@ -99,8 +102,7 @@ _.enterDocument = function() {
   this.imageTag_ = this.getElement().querySelector('img');
   if (!goog.isNull(this.imageTag_)) {
     this.imageTag_.onload = goog.bind(function() {
-      goog.dom.classlist.remove(this.imageTag_, goog.getCssName(
-          'smstb-hidden-image'));
+      this.setImageVisible(true);
     }, this);
     this.imageSource_ = goog.dom.dataset.get(this.imageTag_, 'urlname') ||
         'none';
