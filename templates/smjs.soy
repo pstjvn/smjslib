@@ -133,14 +133,16 @@
   <div class="{css stream-item}">
     <div class="{css type}">{$type}</div>
     <div class="{css image}"><img src="{$thumbnail}" alt="channel thumbnail" class="{css poster}"></div>
-    <div class="{css title}">{$title}</div>
-    <div class="{css description}">{$description}</div>
-    {if $cost != 0}
-      <div class="{css price}">
-        <span>{msg desc="Price label"}Price{/msg}:{sp}</span>
-        <span >{$cost}</span>{sp}<span>{$currency}</span>
-      </div>
-    {/if}
+    <div class="{css details}">
+      <div class="{css title}">{$title}</div>
+      <div class="{css description}">{$description}</div>
+      {if $cost != 0}
+        <div class="{css price}">
+          <span>{msg desc="Price label"}Price{/msg}:{sp}</span>
+          <span >{$cost}</span>{sp}<span>{$currency}</span>
+        </div>
+      {/if}
+    </div>
     {if $isdir != true}
       <div class="{css epg-guide}">{msg desc="Guide"}Guide{/msg}</div>
     {/if}
@@ -156,12 +158,14 @@
     <div class="{css image}">
       <img src="" data-urlname="thumbnail" alt="channel thumbnail" class="{css poster}">
     </div>
-    <div class="{css title}" data-model="publishName"></div>
-    <div class="{css description}" data-model="description"></div>
-    <div class="{css price}" data-model="cost" data-switch data-filter="DisplayIfLargerThanZero">
-      <span>{msg desc="Price label"}Price{/msg}:{sp}</span>
-      <span data-model="cost"></span>{sp}
-      <span data-model="currency"></span>
+    <div class="{css details}">
+      <div class="{css title}" data-model="publishName"></div>
+      <div class="{css description}" data-model="description"></div>
+      <div class="{css price}" data-model="cost" data-switch data-filter="DisplayIfLargerThanZero">
+        <span>{msg desc="Price label"}Price{/msg}:{sp}</span>
+        <span data-model="cost"></span>{sp}
+        <span data-model="currency"></span>
+      </div>
     </div>
     <div class="{css epg-guide}" data-model="isDir" data-switch data-filter="ngDisplayIfFalse">
       {msg desc="Guide"}Guide{/msg}
