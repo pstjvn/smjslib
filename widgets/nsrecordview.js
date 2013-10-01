@@ -31,6 +31,8 @@ smstb.widget.NSRecordView = function() {
 goog.inherits(smstb.widget.NSRecordView, pstj.ui.TableView);
 
 
+smstb.widget.NSRecordView.ActiveItemStyleSuffix_ = ' scale(0.98)';
+
 /** @inheritDoc */
 smstb.widget.NSRecordView.prototype.createRowCell = function() {
   return new smstb.widget.NSRecordItem(
@@ -60,9 +62,9 @@ smstb.widget.NSRecordView.prototype.handleRasterizeReady = function() {
 smstb.widget.NSRecordView.prototype.applyStyles = function() {
   for (var i = 0, len = this.getChildCount(); i < len; i++) {
     var child = this.getChildByOffsetIndex(i);
-    var suffix = (child.isActive()) ? ' scale(0.98)' : '';
     pstj.lab.style.css.setTranslation(child.getElement(), 0,
         ((i * this.getChildHeight()) + this.getVisualOffset()), undefined,
-        suffix);
+        child.isActive() ? smstb.widget.NSRecordView.ActiveItemStyleSuffix_ :
+        '');
   }
 };
