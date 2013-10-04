@@ -158,8 +158,8 @@ smstb.widget.ListItem.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   var guide = this.getElementByClass(goog.getCssName('epg-guide'));
   if (goog.dom.isElement(guide)) {
-    this.epgguide.decorate(guide);
     this.addChild(this.epgguide);
+    this.epgguide.decorate(guide);
     this.getHandler().listen(this.epgguide, goog.ui.Component.EventType.ACTION,
         this.handleEpgGuideButton);
   } else {
