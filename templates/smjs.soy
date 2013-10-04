@@ -131,8 +131,6 @@
   */
 {template .mobileItem}
   <div class="{css stream-item}">
-    <div class="{css type}">{$type}</div>
-    <div class="{css image}"><img src="{$thumbnail}" alt="channel thumbnail" class="{css poster}"></div>
     <div class="{css details}">
       <div class="{css title}">{$title}</div>
       <div class="{css description}">{$description}</div>
@@ -143,6 +141,8 @@
         </div>
       {/if}
     </div>
+    <div class="{css image}"><img src="{$thumbnail}" alt="channel thumbnail" class="{css poster}"></div>
+    <div class="{css type}">{$type}</div>
     {if $isdir != true}
       <div class="{css epg-guide}">{msg desc="Guide"}Guide{/msg}</div>
     {/if}
