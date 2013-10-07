@@ -46,7 +46,7 @@ _.decorateInternal = function(el) {
     button.decorate(children.item(i));
     this.registerDisposable(button);
   }
-  this.current_ = this.getChildAt(0);
+  this.current_ = /** @type {pstj.ui.Button} */(this.getChildAt(0));
   this.current_.setChecked(true);
 };
 

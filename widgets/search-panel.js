@@ -36,7 +36,7 @@ smstb.widget.SearchPanel = function() {
    */
   this.language_ = null;
   /**
-   * @type {Element}
+   * @type {smstb.widget.RadioSelect}
    * @private
    */
   this.type_ = new smstb.widget.RadioSelect();
