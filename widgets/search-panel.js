@@ -31,15 +31,20 @@ smstb.widget.SearchPanel = function() {
    */
   this.input_ = null;
   /**
+   * @type {smstb.widget.RadioSelect}
+   * @private
+   */
+  this.type_ = new smstb.widget.RadioSelect();
+  /**
    * @type {Element}
    * @private
    */
   this.language_ = null;
   /**
-   * @type {smstb.widget.RadioSelect}
+   * @type {Element}
    * @private
    */
-  this.type_ = new smstb.widget.RadioSelect();
+  this.category_ = null;
 
   this.clear_ = new goog.ui.Control('');
   this.hide_ = new goog.ui.Control('');
@@ -53,11 +58,11 @@ goog.inherits(smstb.widget.SearchPanel, goog.ui.Component);
 smstb.widget.SearchPanel.prototype.decorateInternal = function(el) {
   goog.base(this, 'decorateInternal', el);
 
+  this.input_ = this.getElementByClass(goog.getCssName('searchfield'));
+
   this.type_.decorate(this.getElementByClass(goog.getCssName(
       'type-selection')));
 
-
-  this.input_ = this.getElementByClass(goog.getCssName('searchfield'));
   this.language_ = this.getElementByClass(goog.getCssName(
       'language-selection'));
   this.category_ = this.getElementByClass(goog.getCssName(
@@ -82,13 +87,24 @@ smstb.widget.SearchPanel.prototype.decorateInternal = function(el) {
 /** @inheritDoc */
 smstb.widget.SearchPanel.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
+
   this.getHandler().listen(this.input_, goog.events.EventType.CHANGE,
       function(e) {
         this.input_.blur();
         this.dispatchEvent(goog.ui.Component.EventType.ACTION);
       });
 
+  this.getHandler().listen(this.type_, goog.ui.Component.EventType.ACTION,
+      function(e) {
+        this.dispatchEvent(goog.ui.Component.EventType.ACTION);
+      });
+
   this.getHandler().listen(this.language_, goog.events.EventType.CHANGE,
+      function(e) {
+        this.dispatchEvent(goog.ui.Component.EventType.ACTION);
+      });
+
+  this.getHandler().listen(this.category_, goog.events.EventType.CHANGE,
       function(e) {
         this.dispatchEvent(goog.ui.Component.EventType.ACTION);
       });
@@ -118,11 +134,6 @@ smstb.widget.SearchPanel.prototype.enterDocument = function() {
       goog.ui.Component.EventType.ACTION,
       function(e) {
         this.category_.selectedIndex = 0;
-        this.dispatchEvent(goog.ui.Component.EventType.ACTION);
-      });
-
-  this.getHandler().listen(this.type_, goog.ui.Component.EventType.ACTION,
-      function(e) {
         this.dispatchEvent(goog.ui.Component.EventType.ACTION);
       });
 };
