@@ -81,7 +81,6 @@ _.handleAction = function(e) {
  * @return {string}
  */
 _.getValue = function() {
-  console.log(this.current_);
   var ret = this.current_.getActionName();
   if (goog.isNull(ret)) return '';
   return ret;
