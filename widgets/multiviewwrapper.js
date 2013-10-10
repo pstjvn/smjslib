@@ -51,6 +51,7 @@ smstb.widget.MultiViewWrapperRenderer = function() {
   goog.base(this);
 };
 goog.inherits(smstb.widget.MultiViewWrapperRenderer, pstj.ui.ControlRenderer);
+goog.addSingletonGetter(smstb.widget.MultiViewWrapperRenderer);
 
 goog.scope(function() {
 var _ = smstb.widget.MultiViewWrapperRenderer.prototype;
