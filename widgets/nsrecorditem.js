@@ -44,6 +44,9 @@ smstb.widget.NSRecordItem = function(opt_renderer) {
    * @private
    */
   this.hasHiddenImages_ = false;
+
+  // Enable hover state only on PC as it has the resources to render that
+  // on Mobile this is overhead we want to avoid.
   if (pstj.configure.getRuntimeValue(
       'PLATFORM', 'pc', 'SYSMASTER.APPS.MOBILETV') != 'pc') {
     this.setSupportedState(goog.ui.Component.State.HOVER, false);
@@ -53,6 +56,10 @@ goog.inherits(smstb.widget.NSRecordItem, pstj.ui.TableViewItem);
 
 
 /**
+ * This is reference to the default thumbnail to use. Deprecated as the ng
+ * filter is handling the images in such a way as to always return a valid
+ * image source.
+ *
  * @type {string}
  * @protected
  */
@@ -68,15 +75,34 @@ var _ = smstb.widget.NSRecordItem.prototype;
 
 /** @inheritDoc */
 _.setModel = function(model) {
-  goog.base(this, 'setModel', model);
-  this.hasHiddenImages_ = true;
-  this.setImageVisible(false);
+  if (model != this.getModel()) {
+    if (goog.isNull(this.getModel())) {
+      this.hasHiddenImages_ = true;
+      this.setImageVisible(false);
+    } else if (!goog.isNull(model)) {
+      if (model.getProp(this.imageSource_) != this.getModel().getProp(
+          this.imageSource_)) {
+        this.hasHiddenImages_ = true;
+        this.setImageVisible(false);
+      }
+    }
+    goog.base(this, 'setModel', model);
+  }
 };
 
 
+/**
+ * Sets the visiblity state of the image. Basically we want to hide the old
+ * image before we actually change the image itself in order to impove
+ * rendering performance.
+ * @protected
+ * @param {boolean} visible True if the image should be visible.
+ */
 _.setImageVisible = function(visible) {
-  this.imageTag_.style.opacity = (visible) ? 1 : 0;
+  goog.dom.classlist.enable(this.imageTag_, goog.getCssName(
+      'smstb-hidden-image'), !visible);
 };
+
 
 /**
  * Shows the image currently set in the model. This is to divert the rendering
@@ -84,15 +110,16 @@ _.setImageVisible = function(visible) {
  */
 _.showImages = function() {
   if (!this.hasHiddenImages_) return;
+  this.hasHiddenImages_ = false;
   var url = '';
+
   if (!goog.isNull(this.getModel())) {
     url = this.getModel().getProp(this.imageSource_);
-  }
-  if (url == '') {
-    url = smstb.widget.NSRecordItem.DEFAULT_THUMBNAIL;
+    if (url == '') {
+      url = smstb.widget.NSRecordItem.DEFAULT_THUMBNAIL;
+    }
   }
   this.imageTag_.src = url;
-  this.hasHiddenImages_ = false;
 };
 
 
@@ -100,6 +127,7 @@ _.showImages = function() {
 _.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.imageTag_ = this.getElement().querySelector('img');
+
   if (!goog.isNull(this.imageTag_)) {
     this.imageTag_.onload = goog.bind(function() {
       this.setImageVisible(true);
@@ -107,8 +135,8 @@ _.enterDocument = function() {
     this.imageSource_ = goog.dom.dataset.get(this.imageTag_, 'urlname') ||
         'none';
   }
+
   pstj.ui.TouchAgent.getInstance().attach(this);
 };
 
 });  // goog.scope
-
