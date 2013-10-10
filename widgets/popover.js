@@ -1,18 +1,21 @@
 /**
  * @fileoverview Provides the popover layer instanciated for use in the whole
- *  app. It is primarily used to show options dialogs in STB environment.
- * @author <regardingscot@gmail.com> (PeterStJ)
+ * app. It is primarily used to show options dialogs in STB environment.
+ *
+ * @author regardingscot@gmail.com (Peter StJ)
  */
 
 goog.provide('smstb.widget.PopOver');
 
 goog.require('pstj.ui.PopOverLayer');
 
+
 /**
  * @private
  * @type {pstj.ui.PopOverLayer}
  */
 smstb.widget.PopOver.instance_ = null;
+
 
 /**
  * Getter for the instance to use. Require this instance throuout the lifecycle

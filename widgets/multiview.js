@@ -64,7 +64,6 @@ _.enterDocument = function() {
  * @private
  */
 _.findVisibleChild_ = function() {
-  var flip = false;
   if (goog.isNull(this.currentChild_) && this.getChildCount() > 0) {
     this.currentChild_ = goog.asserts.assertInstanceof(this.getChildAt(0),
         goog.ui.Control, 'The multi view children should be controls');

@@ -3,14 +3,18 @@ goog.provide('smstb.widget.FlashPlayer');
 goog.require('goog.dom');
 goog.require('goog.ui.Component');
 
+
+
 /**
  * Provides the Flash player implementation.
+ *
  * @constructor
  * @extends {goog.ui.Component}
  */
 smstb.widget.FlashPlayer = function() {
   goog.base(this);
-  if (!goog.isFunction(window['jwplayer'])) throw new Error('JWPlayer not installed');
+  if (!goog.isFunction(window['jwplayer'])) throw new Error(
+      'JWPlayer not installed');
   /**
    * @type {Function}
    * @protected
@@ -18,6 +22,7 @@ smstb.widget.FlashPlayer = function() {
   this.player_f = window['jwplayer'];
 };
 goog.inherits(smstb.widget.FlashPlayer, goog.ui.Component);
+
 
 /** @inheritDoc */
 smstb.widget.FlashPlayer.prototype.decorateInternal = function(el) {
@@ -33,6 +38,7 @@ smstb.widget.FlashPlayer.prototype.decorateInternal = function(el) {
     'width': '100%'
   });
 };
+
 
 /** @inheritDoc */
 smstb.widget.FlashPlayer.prototype.setModel = function(url) {

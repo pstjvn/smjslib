@@ -31,7 +31,13 @@ smstb.widget.NSRecordView = function() {
 goog.inherits(smstb.widget.NSRecordView, pstj.ui.TableView);
 
 
+/**
+ * @final
+ * @type {string}
+ * @private
+ */
 smstb.widget.NSRecordView.ActiveItemStyleSuffix_ = ' scale(0.98)';
+
 
 /** @inheritDoc */
 smstb.widget.NSRecordView.prototype.createRowCell = function() {

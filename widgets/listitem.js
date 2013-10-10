@@ -66,6 +66,11 @@ _.getTemplate = function(control) {
 };
 
 
+/**
+ * Helper for the thumbnail to use in the view.
+ * @param {goog.ui.Component} control The component to use.
+ * @private
+ */
 _.getThumbnail_ = function(control) {
   var thumb = control.getModel().getProp(smstb.ds.Record.Property.THUMBNAIL);
   if (goog.string.isEmpty(thumb)) {
@@ -77,6 +82,7 @@ _.getThumbnail_ = function(control) {
   }
   return thumb;
 };
+
 
 /** @inheritDoc */
 _.generateTemplateData = function(control) {
@@ -103,6 +109,7 @@ _.createDom = function(control) {
   return /** @type {Element} */ (goog.dom.htmlToDocumentFragment(
       this.getTemplate(control)));
 };
+
 
 /** @inheritDoc */
 _.getKeyEventTarget = function() {
