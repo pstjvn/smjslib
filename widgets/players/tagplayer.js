@@ -1,6 +1,7 @@
 goog.provide('smstb.widget.TagPlayer');
 
 goog.require('goog.ui.Component');
+goog.require('smstb.player.EventType');
 
 
 
@@ -28,7 +29,18 @@ var _ = smstb.widget.TagPlayer.prototype;
 _.setModel = function(url) {
   if (goog.isString(url)) {
     this.getElement()['src'] = url;
+    this.getElement().load();
     this.getElement().play();
   }
 };
+
+
+/** @inheritDoc */
+_.enterDocument = function() {
+  goog.base(this, 'enterDocument');
+  this.getHandler().listen(this.getElement(), 'pause', function(e) {
+    this.dispatchEvent(smstb.player.EventType.PAUSE);
+  });
+};
+
 });  // goog.scope

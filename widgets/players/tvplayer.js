@@ -7,6 +7,7 @@ goog.require('pstj.ui.Button');
 goog.require('pstj.ui.CustomButtonRenderer');
 goog.require('pstj.ui.ngAgent');
 goog.require('smstb.ds.Record');
+goog.require('smstb.player.EventType');
 goog.require('smstb.widget.AndroidPlayer');
 goog.require('smstb.widget.FlashPlayer');
 goog.require('smstb.widget.TagPlayer');
@@ -40,6 +41,8 @@ smstb.widget.TVPlayer.PLAY_TYPE = '&t=1';
 smstb.widget.TVPlayer.prototype.decorateInternal = function(el) {
   goog.base(this, 'decorateInternal', el);
   this.player_ = this.createPlayer();
+  this.addChild(this.player_);
+  this.player_.decorate(this.getElement().querySelector('video'));
   this.backButton.decorate(this.getElementByClass(
       goog.getCssName('backbutton')));
 };
@@ -53,6 +56,11 @@ smstb.widget.TVPlayer.prototype.enterDocument = function() {
         e.stopPropagation();
         goog.dom.classlist.enable(this.getElement(),
             goog.getCssName('right-active'), false);
+      });
+  this.getHandler().listen(this, smstb.player.EventType.PAUSE,
+      function(e) {
+        goog.dom.classlist.remove(this.getElement(), goog.getCssName(
+            'right-active'));
       });
 };
 
@@ -85,11 +93,9 @@ smstb.widget.TVPlayer.prototype.createPlayer = function() {
       break;
     case 'ios':
       player = new smstb.widget.TagPlayer();
-      player.decorate(this.getElement().querySelector('video'));
       break;
     case 'pc':
       player = new smstb.widget.FlashPlayer();
-      player.decorate(this.getElement().querySelector('video'));
       break;
     default:
       throw new Error('Platform unknown');

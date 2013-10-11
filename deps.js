@@ -53,8 +53,8 @@ goog.addDependency('../../../apps/smjs/widgets/pager.js', ['smstb.widget.Pager']
 goog.addDependency('../../../apps/smjs/widgets/payment-confirmation-template.js', ['smstb.widget.PaymentConfirmationTemplate'], ['pstj.ui.Template', 'smstb.template']);
 goog.addDependency('../../../apps/smjs/widgets/players/androidplayer.js', ['smstb.widget.AndroidPlayer'], ['goog.string', 'goog.ui.Component']);
 goog.addDependency('../../../apps/smjs/widgets/players/flashplayer.js', ['smstb.widget.FlashPlayer'], ['goog.dom', 'goog.ui.Component']);
-goog.addDependency('../../../apps/smjs/widgets/players/tagplayer.js', ['smstb.widget.TagPlayer'], ['goog.ui.Component']);
-goog.addDependency('../../../apps/smjs/widgets/players/tvplayer.js', ['smstb.widget.TVPlayer'], ['goog.ui.Component', 'goog.ui.Component.EventType', 'goog.ui.ControlRenderer', 'pstj.ui.Button', 'pstj.ui.CustomButtonRenderer', 'pstj.ui.ngAgent', 'smstb.ds.Record', 'smstb.widget.AndroidPlayer', 'smstb.widget.FlashPlayer', 'smstb.widget.TagPlayer']);
+goog.addDependency('../../../apps/smjs/widgets/players/tagplayer.js', ['smstb.widget.TagPlayer'], ['goog.ui.Component', 'smstb.player.EventType']);
+goog.addDependency('../../../apps/smjs/widgets/players/tvplayer.js', ['smstb.widget.TVPlayer'], ['goog.ui.Component', 'goog.ui.Component.EventType', 'goog.ui.ControlRenderer', 'pstj.ui.Button', 'pstj.ui.CustomButtonRenderer', 'pstj.ui.ngAgent', 'smstb.ds.Record', 'smstb.player.EventType', 'smstb.widget.AndroidPlayer', 'smstb.widget.FlashPlayer', 'smstb.widget.TagPlayer']);
 goog.addDependency('../../../apps/smjs/widgets/popover.js', ['smstb.widget.PopOver'], ['pstj.ui.PopOverLayer']);
 goog.addDependency('../../../apps/smjs/widgets/popup.js', ['smstb.widget.MobilePopup'], ['goog.dom', 'goog.dom.classlist', 'pstj.ui.Button', 'pstj.ui.Templated', 'pstj.ui.ngAgent']);
 goog.addDependency('../../../apps/smjs/widgets/radioselect.js', ['smstb.widget.RadioSelect'], ['goog.ui.Component', 'goog.ui.Component.EventType', 'goog.ui.ControlRenderer', 'pstj.ui.Button', 'pstj.ui.EmbededButtonRenderer']);
