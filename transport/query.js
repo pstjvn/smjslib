@@ -1,11 +1,13 @@
-goog.provide('smstb.transport.Query');
-
 /**
  * @fileoverview Provides the interface for a query object allowing the
  *   transport scheduler to work with them across different transport layers.
  *
  * @author regardingscot@gmail.com (Peter StJ)
  */
+
+goog.provide('smstb.transport.Query');
+
+
 
 /**
  * The query interface. Implementers are guaranteed to work with the Transport
@@ -15,6 +17,7 @@ goog.provide('smstb.transport.Query');
  *   retrieve. Different implementation have different source object types.
  */
 smstb.transport.Query = function() {};
+
 
 /**
  * Method to send the query to its destination.

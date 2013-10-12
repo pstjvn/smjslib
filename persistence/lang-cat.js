@@ -1,19 +1,21 @@
-goog.provide('smstb.persistence.categories');
-goog.provide('smstb.persistence.languages');
-
-goog.require('smstb.persistence.List');
-
 /**
  * @fileoverview Provides wrapped language and category settings access.
  *
  * @author regardingscot@gmail.com (Peter StJ)
  */
 
+goog.provide('smstb.persistence.categories');
+goog.provide('smstb.persistence.languages');
+
+goog.require('smstb.persistence.List');
+
+
 /**
  * @type {smstb.persistence.List}
  * @private
  */
 smstb.persistence.languages.instance_ = null;
+
 
 /**
  * Getter for the language list instance.
@@ -22,12 +24,13 @@ smstb.persistence.languages.instance_ = null;
 smstb.persistence.languages.getInstance = function() {
   if (!smstb.persistence.languages.instance_) {
     smstb.persistence.languages.instance_ = new smstb.persistence.List(
-      'languages');
+        'languages');
     smstb.persistence.languages.instance_.setNamedList(
-      smstb.persistence.languages.list_);
+        smstb.persistence.languages.list_);
   }
   return smstb.persistence.languages.instance_;
 };
+
 
 /**
  * The list of language names.
@@ -100,11 +103,13 @@ smstb.persistence.languages.list_ = [
   'Yiddish'
 ];
 
+
 /**
  * @type {smstb.persistence.List}
  * @private
  */
 smstb.persistence.categories.instance_ = null;
+
 
 /**
  * Getter for the categoty list instance.
@@ -114,12 +119,13 @@ smstb.persistence.categories.instance_ = null;
 smstb.persistence.categories.getInstance = function() {
   if (!smstb.persistence.categories.instance_) {
     smstb.persistence.categories.instance_ = new smstb.persistence.List(
-      'categories');
+        'categories');
     smstb.persistence.categories.instance_.setNamedList(
-      smstb.persistence.categories.list_);
+        smstb.persistence.categories.list_);
   }
   return smstb.persistence.categories.instance_;
 };
+
 
 /**
  * The array of category names.

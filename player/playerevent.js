@@ -1,14 +1,15 @@
-goog.provide('smstb.player.EventType');
-goog.provide('smstb.player.State');
-
-goog.require('goog.events');
-
 /**
  * @fileoverview Provides the event enumeration for common events shared
  *   between player implementations.
  *
  * @author regardingscot@gmail.com (Peter StJ)
  */
+
+goog.provide('smstb.player.EventType');
+goog.provide('smstb.player.State');
+
+goog.require('goog.events');
+
 
 /**
  * Provides the default player events. Custom player implementation could have
@@ -31,6 +32,7 @@ smstb.player.EventType = {
   // Emitted during playback with information about the progress.
   INFO: goog.events.getUniqueId('e')
 };
+
 
 /**
  * Enumarated the player states that we are interested in on abstraction

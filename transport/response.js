@@ -1,5 +1,3 @@
-goog.provide('smstb.transport.Response');
-
 /**
  * @fileoverview Provide the Response interface to allow the transport
  *   dispatcher to work with all different type of transpot mechnizms.
@@ -7,10 +5,15 @@ goog.provide('smstb.transport.Response');
  * @author regardingscot@gmail.com (Peter StJ)
  */
 
+goog.provide('smstb.transport.Response');
+
+
+
 /**
  * @interface
  */
 smstb.transport.Response = function() {};
+
 
 /**
  * Getter for the last error in the list of errors if any.
@@ -18,11 +21,13 @@ smstb.transport.Response = function() {};
  */
 smstb.transport.Response.prototype.getLastError = function() {};
 
+
 /**
  * Checks if there are errors recorded.
  * @return {boolean} True if there are errors in the response.
  */
 smstb.transport.Response.prototype.hasErrors = function() {};
+
 
 /**
  * Returns the response content if there are no errors, otherwise returns

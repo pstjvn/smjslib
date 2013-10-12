@@ -1,19 +1,3 @@
-goog.provide('smstb.player.SMJSPlayer');
-goog.provide('smstb.player.SMJSPlayer.InfoEvent');
-
-goog.require('goog.events.Event');
-goog.require('goog.events.EventHandler');
-goog.require('goog.events.EventTarget');
-goog.require('smstb.Remote');
-goog.require('smstb.ds.Record');
-goog.require('smstb.player.EventType');
-goog.require('smstb.player.IPlayer');
-goog.require('smstb.player.State');
-goog.require('smstb.serverconfig.Section');
-goog.require('smstb.serverconfig.Section.EventType');
-goog.require('smstb.transport.smjs.pubsub');
-goog.require('smstb.transport.smjspackage.Base');
-
 /**
  * @fileoverview Provides the smjs hardware player wrapper. The player
  *   requires some 'setting up' before it could be useful and this is why it
@@ -33,6 +17,24 @@ goog.require('smstb.transport.smjspackage.Base');
  *
  * @author regardingscot@gmail.com (Peter StJ)
  */
+
+goog.provide('smstb.player.SMJSPlayer');
+goog.provide('smstb.player.SMJSPlayer.InfoEvent');
+
+goog.require('goog.events.Event');
+goog.require('goog.events.EventHandler');
+goog.require('goog.events.EventTarget');
+goog.require('smstb.Remote');
+goog.require('smstb.ds.Record');
+goog.require('smstb.player.EventType');
+goog.require('smstb.player.IPlayer');
+goog.require('smstb.player.State');
+goog.require('smstb.serverconfig.Section');
+goog.require('smstb.serverconfig.Section.EventType');
+goog.require('smstb.transport.smjs.pubsub');
+goog.require('smstb.transport.smjspackage.Base');
+
+
 
 /**
  * The SMJS based hardware player abstraction. Note that most of the methods
@@ -63,25 +65,26 @@ smstb.player.SMJSPlayer = function() {
 
   // listen for updates as well.
   this.getHandler().listen(smstb.serverconfig.Section.getSection('streaming'),
-    smstb.serverconfig.Section.EventType.CHANGE, this.getParentalPass_);
+      smstb.serverconfig.Section.EventType.CHANGE, this.getParentalPass_);
 
   // always listen for stop
   this.getHandler().listen(smstb.Remote.getInstance(),
-    smstb.Remote.EventType.KEY, this.handleRemoteKey_);
+      smstb.Remote.EventType.KEY, this.handleRemoteKey_);
 
   // Listen for player events coming from socket and sync wrapper with it.
   smstb.transport.smjs.pubsub.channel.subscribe(
       smstb.transport.smjs.pubsub.Topic.PLAYER_EVENT, goog.bind(
-        this.handlePlayerEvent_, this));
+          this.handlePlayerEvent_, this));
 
   // Listen for the media events (playing, stopped etc)
   smstb.transport.smjs.pubsub.channel.subscribe(
-    smstb.transport.smjs.pubsub.Topic.MEDIA, goog.bind(this.handleMediaEvent_,
-      this));
+      smstb.transport.smjs.pubsub.Topic.MEDIA, goog.bind(this.handleMediaEvent_,
+          this));
 
 };
 goog.inherits(smstb.player.SMJSPlayer, goog.events.EventTarget);
 goog.addSingletonGetter(smstb.player.SMJSPlayer);
+
 
 /**
  * Translates the DSP states to the global player states.
@@ -109,6 +112,7 @@ smstb.player.SMJSPlayer.prototype.translateState_ = function(stateName) {
   }
 };
 
+
 /**
  * Sets the internal state of this player's implementation.
  * @param {string} stateName The state name as reported by the DSP event.
@@ -122,6 +126,7 @@ smstb.player.SMJSPlayer.prototype.setState_ = function(stateName) {
     this.emitStateChangeEvent_();
   }
 };
+
 
 /**
  * Emits an event on state change. The event is meant to be matching the
@@ -139,6 +144,7 @@ smstb.player.SMJSPlayer.prototype.emitStateChangeEvent_ = function() {
   }
 };
 
+
 /**
  * Handles the response package that contains media event.
  * @param {smstb.transport.smjs.Response} pack The package of the event.
@@ -148,6 +154,7 @@ smstb.player.SMJSPlayer.prototype.handleMediaEvent_ = function(pack) {
   var ev = /** @type {SMJSJson.MediaEvent} */ (pack.getEvent());
   this.setState_(ev.state);
 };
+
 
 /**
  * Handles the event from the player subsistem on m* devices.
@@ -159,6 +166,7 @@ smstb.player.SMJSPlayer.prototype.handlePlayerEvent_ = function(resp) {
   var ev = /** @type {!SMJSJson.PlayerEvent} */(resp.getEvent());
   this.dispatchEvent(new smstb.player.SMJSPlayer.InfoEvent(ev));
 };
+
 
 /**
  * Handles the abstracted remote keys coming to the system. Those are
@@ -180,13 +188,14 @@ smstb.player.SMJSPlayer.prototype.handleRemoteKey_ = function(e) {
   }
 };
 
+
 /**
  * Dummy function just to satisfy the compiler.
  * @param {smstb.transport.Response} arg Dead end response.
  * @private
  */
-smstb.player.SMJSPlayer.prototype.dummyFunction_ = function(arg) {
-};
+smstb.player.SMJSPlayer.prototype.dummyFunction_ = function(arg) {};
+
 
 /**
  * Getter for the parental passwork directly from the back end config system.
@@ -194,11 +203,12 @@ smstb.player.SMJSPlayer.prototype.dummyFunction_ = function(arg) {
  */
 smstb.player.SMJSPlayer.prototype.getParentalPass_ = function() {
   smstb.serverconfig.Section.getSection('streaming').get('lockpass',
-    goog.bind(function(pass) {
-      this.parentalPass_ = pass;
-      this.dispatchEvent(smstb.player.EventType.READY);
-    }, this));
+      goog.bind(function(pass) {
+        this.parentalPass_ = pass;
+        this.dispatchEvent(smstb.player.EventType.READY);
+      }, this));
 };
+
 
 /**
  * Getter for the handler instance bound to the player itself.
@@ -216,13 +226,14 @@ smstb.player.SMJSPlayer.prototype.getHandler = function() {
 /**
  * Plays a video object.
  * @param {pstj.ds.ListItem} obj The record object to play.
- * @param {boolean=} resume If the player should attempt to resume the
+ * @param {boolean=} opt_resume If the player should attempt to resume the
  *  playback.
- * @param {boolean=} record True if recording should be performed.
- * @param {boolean=} nocam True if the web cam should be active durring
+ * @param {boolean=} opt_record True if recording should be performed.
+ * @param {boolean=} opt_nocam True if the web cam should be active durring
  *  playback.
  */
-smstb.player.SMJSPlayer.prototype.play = function(obj, resume, record, nocam) {
+smstb.player.SMJSPlayer.prototype.play = function(obj, opt_resume,
+    opt_record, opt_nocam) {
   var isAudio = false;
   var uri = obj.getProp(smstb.ds.Record.Property.PLAYURL);
 
@@ -230,11 +241,12 @@ smstb.player.SMJSPlayer.prototype.play = function(obj, resume, record, nocam) {
   // and we can safely play the item.
   (new smstb.transport.smjspackage.Base({
     'url': uri,
-    'resume': !!resume,
+    'resume': !!opt_resume,
     'audio': isAudio,
-    'nocam': !!nocam
+    'nocam': !!opt_nocam
   }, 'play')).send(this.dummyFunction_);
 };
+
 
 /**
  * Stops the playback. This is basically calling the stop at the backend.
@@ -243,10 +255,12 @@ smstb.player.SMJSPlayer.prototype.stop = function() {
   (new smstb.transport.smjspackage.Base({}, 'stop')).send(this.dummyFunction_);
 };
 
+
 /**
  * Implements the pause command.
  */
 smstb.player.SMJSPlayer.prototype.pause = function() {};
+
 
 /**
  * Implements the interface.
@@ -256,6 +270,7 @@ smstb.player.SMJSPlayer.prototype.getState = function() {
   return this.internalState_;
 };
 
+
 /**
  * Implements the interface call.
  * @return {boolean} True if resuming is supported.
@@ -264,6 +279,7 @@ smstb.player.SMJSPlayer.prototype.isResumeSupoprted = function() {
   return true;
 };
 
+
 /**
  * Implementation of the interface.
  * @return {boolean} For now always be false.
@@ -271,6 +287,8 @@ smstb.player.SMJSPlayer.prototype.isResumeSupoprted = function() {
 smstb.player.SMJSPlayer.prototype.isRecordingSupported = function() {
   return false;
 };
+
+
 /**
  * Implements the interface.
  * @return {boolean} True if supported.
@@ -278,6 +296,7 @@ smstb.player.SMJSPlayer.prototype.isRecordingSupported = function() {
 smstb.player.SMJSPlayer.prototype.isParentalLockSupported = function() {
   return true;
 };
+
 
 /**
  * Implements the pass matching.
@@ -288,6 +307,8 @@ smstb.player.SMJSPlayer.prototype.passMatches = function(pass) {
   return (pass == this.parentalPass_);
 };
 
+
+
 /**
  * Special info event for playback.
  * @param {SMJSJson.PlayerEvent} ev The player event directly.
@@ -296,7 +317,7 @@ smstb.player.SMJSPlayer.prototype.passMatches = function(pass) {
  */
 smstb.player.SMJSPlayer.InfoEvent = function(ev) {
   goog.base(this, smstb.player.EventType.INFO,
-    smstb.player.SMJSPlayer.getInstance());
+      smstb.player.SMJSPlayer.getInstance());
   this.playbackInfo = ev;
 };
 goog.inherits(smstb.player.SMJSPlayer.InfoEvent, goog.events.Event);

@@ -13,6 +13,8 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.events.KeyHandler.EventType');
 goog.require('smstb.transport.smjs.pubsub');
 
+
+
 /**
  * The remote control abstraction. It should hide the kbd/remote.
  * @constructor
@@ -22,18 +24,19 @@ smstb.Remote = function() {
   goog.base(this);
 
   smstb.transport.smjs.pubsub.channel.subscribe(
-    smstb.transport.smjs.pubsub.Topic.EVENT, goog.bind(
-      this.handleEvents, this));
+      smstb.transport.smjs.pubsub.Topic.EVENT, goog.bind(
+          this.handleEvents, this));
 
   var kbdhandler = new goog.events.KeyHandler();
 
   goog.events.listen(kbdhandler, goog.events.KeyHandler.EventType.KEY,
-    goog.bind(this.handleKeyboardKey, this));
+      goog.bind(this.handleKeyboardKey, this));
 
   kbdhandler.attach(document);
 };
 goog.inherits(smstb.Remote, goog.events.EventTarget);
 goog.addSingletonGetter(smstb.Remote);
+
 
 /**
  * @param {goog.events.KeyEvent} e The keyhandler event.
@@ -63,7 +66,7 @@ smstb.Remote.prototype.handleKeyboardKey = function(e) {
       break;
     case goog.events.KeyCodes.PAGE_DOWN:
       this.dispatchEvent(new smstb.Remote.Event(
-        smstb.Remote.Keys.CHANNEL_DOWN));
+          smstb.Remote.Keys.CHANNEL_DOWN));
       break;
     case goog.events.KeyCodes.HOME:
       this.dispatchEvent(new smstb.Remote.Event(smstb.Remote.Keys.HOME));
@@ -73,6 +76,7 @@ smstb.Remote.prototype.handleKeyboardKey = function(e) {
       break;
   }
 };
+
 
 /**
  * Handles the pubsub event topic broadcast.
@@ -84,9 +88,10 @@ smstb.Remote.prototype.handleKeyboardKey = function(e) {
 smstb.Remote.prototype.handleEvents = function(resp) {
   if (goog.isString(resp.getEvent()['key'])) {
     this.dispatchEvent(new smstb.Remote.Event(
-      goog.array.indexOf(smstb.Remote.KeysNames, resp.getEvent()['key'])));
+        goog.array.indexOf(smstb.Remote.KeysNames, resp.getEvent()['key'])));
   }
 };
+
 
 /**
  * Provides the event type for the command keys (remote or kbd)
@@ -95,6 +100,7 @@ smstb.Remote.prototype.handleEvents = function(resp) {
 smstb.Remote.EventType = {
   KEY: goog.events.getUniqueId('key')
 };
+
 
 /**
  * Provides the numerical named keys from the remote.
@@ -147,6 +153,7 @@ smstb.Remote.Keys = {
   STAR: 43
 };
 
+
 /**
  * The key names as they come from the raw event object.
  * @type {Array.<string>}
@@ -197,6 +204,7 @@ smstb.Remote.KeysNames = [
   'pound',
   'star'
 ];
+
 
 
 /**

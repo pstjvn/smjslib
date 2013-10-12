@@ -2,6 +2,8 @@ goog.provide('smstb.ds.Record');
 
 goog.require('pstj.ds.ListItem');
 
+
+
 /**
  * Wrapper for the video / audio record.
  * @constructor
@@ -12,6 +14,7 @@ smstb.ds.Record = function(data) {
   goog.base(this, data);
 };
 goog.inherits(smstb.ds.Record, pstj.ds.ListItem);
+
 
 /**
  * The named properties in the record type.

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Imeplemtation of the Query interface for the XHR layer.
+ *
+ * @author regardingscot@gmail.com (Peter StJ)
+ */
+
 goog.provide('smstb.transport.xhr.Query');
 
 goog.require('goog.Disposable');
@@ -10,11 +16,7 @@ goog.require('smstb.transport.Query');
 goog.require('smstb.transport.config');
 goog.require('smstb.transport.xhr.Response');
 
-/**
- * @fileoverview Imeplemtation of the Query interface for the XHR layer.
- *
- * @author regardingscot@gmail.com (Peter StJ)
- */
+
 
 /**
  * Implements the smstb.transport.Query interface using the XHR transport.
@@ -27,13 +29,14 @@ goog.require('smstb.transport.xhr.Response');
 smstb.transport.xhr.Query = function(source) {
   if (goog.isNumber(source)) {
     source = this.getSourceFromEnumeration(
-      /** @type {smstb.transport.Resource} */ (source));
+        /** @type {smstb.transport.Resource} */(source));
   }
   goog.asserts.assertString(source, 'The parameter couldnt be converted to' +
-    ' string');
+      ' string');
   this.uri = this.composeUri(source);
 };
 goog.inherits(smstb.transport.xhr.Query, goog.Disposable);
+
 
 /**
  * Imeplements the send method from the interface.
@@ -42,8 +45,9 @@ goog.inherits(smstb.transport.xhr.Query, goog.Disposable);
  */
 smstb.transport.xhr.Query.prototype.send = function(callback) {
   goog.net.XhrIo.send(this.uri, goog.bind(this.handleCompleteEvent, this,
-    callback));
+      callback));
 };
+
 
 /**
  * The default URI prefix to use.
@@ -51,11 +55,13 @@ smstb.transport.xhr.Query.prototype.send = function(callback) {
  */
 smstb.transport.xhr.Query.uriPrefix = '';
 
+
 /**
  * The default URI exec path to use.
  * @type {string}
  */
 smstb.transport.xhr.Query.uriExecPath = '/cgi-bin/if.cgi?';
+
 
 /**
  * The default URI param (run) to use.
@@ -63,11 +69,13 @@ smstb.transport.xhr.Query.uriExecPath = '/cgi-bin/if.cgi?';
  */
 smstb.transport.xhr.Query.uriRunParam = 'run=mstreams';
 
+
 /**
  * The URI to use with the request.
  * @type {string}
  */
 smstb.transport.xhr.Query.prototype.uri;
+
 
 /**
  * Handles the complete event from the XHR transport layer.
@@ -77,15 +85,16 @@ smstb.transport.xhr.Query.prototype.uri;
  * @protected
  */
 smstb.transport.xhr.Query.prototype.handleCompleteEvent = function(callback,
-  e) {
+    e) {
   // the transport itself will handle the connunct. just make sure to submit
   // the response as reponse object.
   var result = this.constructResponse(e.target.isSuccess() ?
-    e.target.getResponseText() : '');
+      e.target.getResponseText() : '');
   callback(result);
   goog.dispose(result);
   goog.dispose(this);
 };
+
 
 /**
  * Constructs the respone object requered.
@@ -96,6 +105,7 @@ smstb.transport.xhr.Query.prototype.handleCompleteEvent = function(callback,
 smstb.transport.xhr.Query.prototype.constructResponse = function(string) {
   return new smstb.transport.xhr.Response(string);
 };
+
 
 /**
  * Turn enumerable resource into valid string for retrieval.
@@ -108,9 +118,10 @@ smstb.transport.xhr.Query.prototype.getSourceFromEnumeration = function(num) {
     return this.getPrefix() + this.getExecPath() + this.getRunParam(num);
   } else {
     throw new Error('The enumerable URI getter expects number, but' +
-      ' instead it got ' + goog.typeOf(num));
+        ' instead it got ' + goog.typeOf(num));
   }
 };
+
 
 /**
  * Composes the Uri by appending additionals parameters that might be needed.
@@ -120,19 +131,20 @@ smstb.transport.xhr.Query.prototype.getSourceFromEnumeration = function(num) {
  */
 smstb.transport.xhr.Query.prototype.composeUri = function(source) {
   if (!!pstj.configure.getRuntimeValue('USE_LANGUAGES', true,
-    smstb.transport.config.prefix)) {
+      smstb.transport.config.prefix)) {
     source += this.getLanguages();
   }
   if (!!pstj.configure.getRuntimeValue('USE_CATEGORIES', true,
-    smstb.transport.config.prefix)) {
+      smstb.transport.config.prefix)) {
     source += this.getCategories();
   }
   if (!!pstj.configure.getRuntimeValue('APPEND_CREDENTIALS', false,
-    smstb.transport.config.prefix)) {
+      smstb.transport.config.prefix)) {
     source += this.getCredentials();
   }
   return source;
 };
+
 
 /**
  * Getter for any language settings that might be available in the system.
@@ -145,6 +157,7 @@ smstb.transport.xhr.Query.prototype.getLanguages = function() {
   return '&languages=' + val.join(',');
 };
 
+
 /**
  * Getter for any category settings that might be avialble in the system.
  * @return {string} list of catogories to use in the URI.
@@ -156,6 +169,7 @@ smstb.transport.xhr.Query.prototype.getCategories = function() {
   return '&categories=' + val.join(',');
 };
 
+
 /**
  * Getter for the credentials that might be stored in the system.
  * @return {string} the user credentials to be used in the URI.
@@ -165,6 +179,7 @@ smstb.transport.xhr.Query.prototype.getCredentials = function() {
   return '';
 };
 
+
 /**
  * Getter for the prefix to be used in the URI composition.
  * @protected
@@ -172,9 +187,10 @@ smstb.transport.xhr.Query.prototype.getCredentials = function() {
  */
 smstb.transport.xhr.Query.prototype.getPrefix = function() {
   return pstj.configure.getRuntimeValue('URI_PREFIX',
-    smstb.transport.xhr.Query.uriPrefix,
-    smstb.transport.config.prefix).toString();
+      smstb.transport.xhr.Query.uriPrefix,
+      smstb.transport.config.prefix).toString();
 };
+
 
 /**
  * Getter for the exec path for the source. This is the cgi-bin path usually.
@@ -183,9 +199,10 @@ smstb.transport.xhr.Query.prototype.getPrefix = function() {
  */
 smstb.transport.xhr.Query.prototype.getExecPath = function() {
   return pstj.configure.getRuntimeValue('URI_EXEC_PATH',
-    smstb.transport.xhr.Query.uriExecPath,
-    smstb.transport.config.prefix).toString();
+      smstb.transport.xhr.Query.uriExecPath,
+      smstb.transport.config.prefix).toString();
 };
+
 
 /**
  * Getter for the run param for the URI.
@@ -196,25 +213,27 @@ smstb.transport.xhr.Query.prototype.getExecPath = function() {
  */
 smstb.transport.xhr.Query.prototype.getRunParam = function(enumId) {
   var runtime = pstj.configure.getRuntimeValue('URI_RUN_PARAMS_' + enumId,
-    smstb.transport.xhr.Query.Uri[enumId],
-    smstb.transport.config.prefix);
+      smstb.transport.xhr.Query.Uri[enumId],
+      smstb.transport.config.prefix);
   if (!goog.isString(runtime)) {
     throw new Error('Cannot find run parameter for enumerable source with' +
-      ' id' + enumId);
+        ' id' + enumId);
   }
   return runtime;
 };
+
 
 /** @inheritDoc */
 smstb.transport.xhr.Query.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
 };
 
+
 /**
  * The map of enumerable source to Uri
  * @type {Array.<string>}
  */
 smstb.transport.xhr.Query.Uri = [
-// IPTVLIST
+  // IPTVLIST
   'run=mstreams'
 ];

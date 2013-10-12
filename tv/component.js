@@ -11,6 +11,8 @@ goog.require('smstb.tv.Topic');
 goog.require('smstb.tv.bus');
 goog.require('smstb.tv.decorator');
 
+
+
 /**
  * This is the base TV component class. Those components are assumed to be run
  *   on TV/STB devices and might not behave as expected in browser and
@@ -30,99 +32,122 @@ smstb.tv.Component = function(opt_r) {
 };
 goog.inherits(smstb.tv.Component, goog.ui.Control);
 
+
 smstb.tv.decorator.register(
-  smstb.tv.ComponentRenderer.getInstance().getCssClass(), smstb.tv.Component);
+    smstb.tv.ComponentRenderer.getInstance().getCssClass(), smstb.tv.Component);
+
 
 goog.scope(function() {
 
-  var _ = smstb.tv.Component.prototype;
-  /** @inheritDoc */
-  _.enterDocument = function() {
-    goog.base(this, 'enterDocument');
-    this.getHandler().listen(this, goog.ui.Component.EventType.FOCUS,
+var _ = smstb.tv.Component.prototype;
+
+
+/** @inheritDoc */
+_.enterDocument = function() {
+  goog.base(this, 'enterDocument');
+  this.getHandler().listen(this, goog.ui.Component.EventType.FOCUS,
       this.notifyParent);
-  };
-
-  /**
-   * Handles the focus event.
-   * @param {goog.events.Event} e The FOCUS component event.
-   */
-  _.notifyParent = function(e) {
-    var parent = this.getParent();
-    if (parent instanceof smstb.tv.Component) {
-      parent.setFocusedChild(this);
-    }
-  };
+};
 
 
-  /**
-   * Checks if a child is our direct decentant.
-   * @param {goog.ui.Component} component The child to test.
-   * @return {boolean} True if the child is a direct decentant.
-   */
-  _.isChild = function(component) {
-    return (this.indexOfChild(component) != -1);
-  };
+/**
+ * Handles the focus event.
+ * @param {goog.events.Event} e The FOCUS component event.
+ */
+_.notifyParent = function(e) {
+  var parent = this.getParent();
+  if (parent instanceof smstb.tv.Component) {
+    parent.setFocusedChild(this);
+  }
+};
 
-  /**
-   * Sets the focused child.
-   * @param {goog.ui.Component} component The child to set as current focus
-   *   bearer.
-   */
-  _.setFocusedChild = function(component) {
-    if (this.isChild(component)) {
-      this.focusedChild_ = component;
-    }
-  };
 
-  /** @inheritDoc */
-  _.decorateInternal = function(el) {
-    goog.base(this, 'decorateInternal', el);
-    if (goog.dom.dataset.has(this.getElement(), 'fm')) {
-      this.focusFollowsMouse_ = true;
-    }
-  };
+/**
+ * Checks if a child is our direct decentant.
+ * @param {goog.ui.Component} component The child to test.
+ * @return {boolean} True if the child is a direct decentant.
+ */
+_.isChild = function(component) {
+  return (this.indexOfChild(component) != -1);
+};
 
-  /** @inheritDoc */
-  _.handleMouseOver = function(e) {
-    goog.base(this, 'handleMouseOver', e);
-    if (this.isHighlighted() && this.focusFollowsMouse_) {
-      this.focus();
-    }
-  };
 
-  /** @inheritDoc */
-  _.handleMouseOut = function(e) {
-    goog.base(this, 'handleMouseOut', e);
-    if (!this.isHighlighted() && this.focusFollowsMouse_) {
-      this.blur();
-    }
-  };
+/**
+ * Sets the focused child.
+ * @param {goog.ui.Component} component The child to set as current focus
+ *   bearer.
+ */
+_.setFocusedChild = function(component) {
+  if (this.isChild(component)) {
+    this.focusedChild_ = component;
+  }
+};
 
-  /**
-   * Focusses the component.
-   */
-  _.focus = function() {
-    smstb.tv.bus.publish(smstb.tv.Topic.FOCUSED, this);
-    this.setFocused(true);
-  };
 
-  /**
-   * Blurs the component.
-   */
-  _.blur = function() {
-    this.setFocused(false);
-  };
+/**
+ * Getter for the currently focused child.
+ * @return {goog.ui.Component}
+ */
+_.getFocusedChild = function() {
+  return this.focusedChild_;
+};
 
-  /**
-   * Handles the remote key (abstracted).
-   * @param {number} key The key identifier.
-   */
-  _.handleKey = function(key) {
-    this.dispatchEvent(new smstb.tv.Component.Event(this, key));
-  };
 
-});
+/** @inheritDoc */
+_.decorateInternal = function(el) {
+  goog.base(this, 'decorateInternal', el);
+  if (goog.dom.dataset.has(this.getElement(), 'fm')) {
+    this.focusFollowsMouse_ = true;
+  }
+};
+
+
+/** @inheritDoc */
+_.handleMouseOver = function(e) {
+  goog.base(this, 'handleMouseOver', e);
+  if (this.isHighlighted() && this.focusFollowsMouse_) {
+    this.focus();
+  }
+};
+
+
+/** @inheritDoc */
+_.handleMouseOut = function(e) {
+  goog.base(this, 'handleMouseOut', e);
+  if (!this.isHighlighted() && this.focusFollowsMouse_) {
+    this.blur();
+  }
+};
+
+
+/**
+ * Focusses the component.
+ */
+_.focus = function() {
+  smstb.tv.bus.publish(smstb.tv.Topic.FOCUSED, this);
+  this.setFocused(true);
+};
+
+
+/**
+ * Blurs the component.
+ */
+_.blur = function() {
+  this.setFocused(false);
+};
+
+
+/**
+ * Handles the remote key (abstracted).
+ * @param {number} key The key identifier.
+ */
+_.handleKey = function(key) {
+  this.dispatchEvent(new smstb.tv.Component.Event(this, key));
+};
+
+});  // goog.scope
+
+
 
 /**
  * The custom event. Do we really need this?
@@ -136,6 +161,7 @@ smstb.tv.Component.Event = function(target, key) {
   this.key = key;
 };
 goog.inherits(smstb.tv.Component.Event, goog.events.Event);
+
 
 /**
  * @enum {string}

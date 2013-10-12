@@ -1,14 +1,16 @@
-goog.provide('smstb.persistence.List');
-
-goog.require('goog.async.Delay');
-goog.require('smstb.persistence.Storage');
-
 /**
  * @fileoverview Abstraction over list values that should be able to persist
  *   in the browser data storage.
  *
  * @author regardingscot@gmail.com (Peter StJ)
  */
+
+goog.provide('smstb.persistence.List');
+
+goog.require('goog.async.Delay');
+goog.require('smstb.persistence.Storage');
+
+
 
 /**
  * Provides asbtracted view on list of storeable values. The list expects
@@ -19,45 +21,36 @@ goog.require('smstb.persistence.Storage');
  * @extends {goog.Disposable}
  */
 smstb.persistence.List = function(storage_name) {
-  this.list = [];
-  this.delay_ = new goog.async.Delay(this.applyValueToStorage_, 1500, this);
+  /**
+   * The name of the storage key to use.
+   * @type {!string}
+   * @protected
+   */
   this.name = storage_name;
-  var value = smstb.persistence.Storage.getInstance().get(
-    this.name);
-  if (typeof value == 'undefined') {
-    this.value = null;
-  } else {
-    this.value = /** @type {Array.<number>} */ (value);
+  /**
+   * The stored value.
+   * @type {Array.<number>}
+   */
+  this.value = null;
+  /**
+   * The names of the possible values in the store.
+   * @type {Array}
+   */
+  this.list = [];
+  /**
+   * Artificial delay introduced to work around use case where accessing the
+   *   storage is too slow.
+   * @type {goog.async.Delay}
+   * @private
+   */
+  this.delay_ = new goog.async.Delay(this.applyValueToStorage_, 1500, this);
+  var value = smstb.persistence.Storage.getInstance().get(this.name);
+  if (goog.isDef(value)) {
+    this.value = /** @type {Array.<number>} */(value);
   }
 };
 goog.inherits(smstb.persistence.List, goog.Disposable);
 
-/**
- * The name of the storage key to use.
- * @type {!string}
- * @protected
- */
-smstb.persistence.List.prototype.name;
-
-/**
- * The stored value.
- * @type {Array.<number>}
- */
-smstb.persistence.List.prototype.value;
-
-/**
- * The names of the possible values in the store.
- * @type {Array}
- */
-smstb.persistence.List.prototype.list;
-
-/**
- * Artificial delay introduced to work around use case where accessing the
- *   storage is too slow.
- * @type {goog.async.Delay}
- * @private
- */
-smstb.persistence.List.prototype.delay_;
 
 /**
  * Saves the current value in the stoage mechinism automatically selected.
@@ -65,9 +58,9 @@ smstb.persistence.List.prototype.delay_;
  * @private
  */
 smstb.persistence.List.prototype.applyValueToStorage_ = function() {
-  smstb.persistence.Storage.getInstance().set(
-    this.name, this.value);
+  smstb.persistence.Storage.getInstance().set(this.name, this.value);
 };
+
 
 /**
  * Fills in the names of the values that are stored. Those are intentionally
@@ -79,6 +72,7 @@ smstb.persistence.List.prototype.setNamedList = function(list) {
   this.list = list;
 };
 
+
 /**
  * Getter for the named listing.
  * @return {Array} The list previously assigned.
@@ -86,6 +80,7 @@ smstb.persistence.List.prototype.setNamedList = function(list) {
 smstb.persistence.List.prototype.getNamedList = function() {
   return this.list;
 };
+
 
 /**
  * Getter for the currently selected indexes. The method is introduced to safe
@@ -95,6 +90,7 @@ smstb.persistence.List.prototype.getNamedList = function() {
 smstb.persistence.List.prototype.getSelectedIndexes = function() {
   return /** @type {Array.<number>} */ (this.value);
 };
+
 
 /**
  * Sets new list with selected indexes.
@@ -107,6 +103,7 @@ smstb.persistence.List.prototype.setSelectedIndexes = function(list) {
   this.value = /** @type {Array.<number>} */ (list);
   this.delay_.start();
 };
+
 
 /** @inheritDoc */
 smstb.persistence.List.prototype.disposeInternal = function() {

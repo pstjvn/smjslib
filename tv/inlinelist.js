@@ -12,9 +12,12 @@ goog.require('smstb.tv.Component');
 goog.require('smstb.tv.ComponentRenderer');
 goog.require('smstb.tv.decorator');
 
+
+
 /**
  * Provides the UI for selecting from list of options. Only single selection
- *   is supported.
+ * is supported.
+ *
  * @constructor
  * @extends {smstb.tv.Component}
  * @param {pstj.ui.ControlRenderer=} opt_r Optional renderer to use.
@@ -22,7 +25,6 @@ goog.require('smstb.tv.decorator');
 smstb.tv.InlineList = function(opt_r) {
   goog.base(this, opt_r || smstb.tv.InlineListRenderer.getInstance());
   this.setHandleMouseEvents(false);
-  //this.setDispatchTransitionEvents(goog.ui.Component.State.ACTIVE, false);
   /**
    * The list of data. This should be set only once!
    * @type {pstj.ds.List}
@@ -32,25 +34,31 @@ smstb.tv.InlineList = function(opt_r) {
 };
 goog.inherits(smstb.tv.InlineList, smstb.tv.Component);
 
+
 goog.scope(function() {
-  var _ = smstb.tv.InlineList.prototype;
-  /** @inheritDoc */
-  _.setModel = function(model) {
-    if (model instanceof pstj.ds.List) {
-      this.list_ = model;
-      goog.base(this, 'setModel', model.getCurrent());
-    } else {
-      goog.base(this, 'setModel', model);
-    }
-    pstj.ui.ngAgent.getInstance().apply(this);
-  };
-  /** @inheritDoc */
-  _.enterDocument = function() {
-    goog.base(this, 'enterDocument');
 
-    pstj.ui.ngAgent.getInstance().apply(this);
+var _ = smstb.tv.InlineList.prototype;
 
-    this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
+
+/** @inheritDoc */
+_.setModel = function(model) {
+  if (model instanceof pstj.ds.List) {
+    this.list_ = model;
+    goog.base(this, 'setModel', model.getCurrent());
+  } else {
+    goog.base(this, 'setModel', model);
+  }
+  pstj.ui.ngAgent.getInstance().apply(this);
+};
+
+
+/** @inheritDoc */
+_.enterDocument = function() {
+  goog.base(this, 'enterDocument');
+
+  pstj.ui.ngAgent.getInstance().apply(this);
+
+  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
       function(e) {
         if (goog.isNull(this.list_)) {
           throw new Error('There is no data in the listing');
@@ -65,42 +73,48 @@ goog.scope(function() {
             this.changeSelection(true);
           }
         }
-      }
-    );
-  };
-  /** @inheritDoc */
-  _.disposeInternal = function() {
-    goog.base(this, 'disposeInternal');
-    this.list_ = null;
-  };
+      });
+};
 
-  /**
-   * Alter the selection in the list.
-   * @param {boolean} forward True if we want to move to the next selection.
-   */
-  _.changeSelection = function(forward) {
-    this.list_.setCurrent(
-      goog.asserts.assertInstanceof(
-        ((forward) ? this.list_.getNext() : this.list_.getPrevious()),
-        pstj.ds.ListItem));
 
-    this.setModel(this.list_.getCurrent());
-  };
+/** @inheritDoc */
+_.disposeInternal = function() {
+  goog.base(this, 'disposeInternal');
+  this.list_ = null;
+};
 
-  /** @inheritDoc */
-  _.handleKey = function(key) {
-    if (key == smstb.Remote.Keys.LEFT) {
-      this.changeSelection(false);
-    } else if (key == smstb.Remote.Keys.RIGHT) {
-      this.changeSelection(true);
-    } else {
-      goog.base(this, 'handleKey', key);
-    }
-  };
-});
+
+/**
+ * Alter the selection in the list.
+ * @param {boolean} forward True if we want to move to the next selection.
+ */
+_.changeSelection = function(forward) {
+  this.list_.setCurrent(goog.asserts.assertInstanceof(
+      ((forward) ? this.list_.getNext() : this.list_.getPrevious()),
+      pstj.ds.ListItem));
+
+  this.setModel(this.list_.getCurrent());
+};
+
+
+/** @inheritDoc */
+_.handleKey = function(key) {
+  if (key == smstb.Remote.Keys.LEFT) {
+    this.changeSelection(false);
+  } else if (key == smstb.Remote.Keys.RIGHT) {
+    this.changeSelection(true);
+  } else {
+    goog.base(this, 'handleKey', key);
+  }
+};
+
+});  // goog.scope
+
+
 
 /**
  * Provides the renderer for the inline listing.
+ *
  * @constructor
  * @extends {smstb.tv.ComponentRenderer}
  */
@@ -110,6 +124,7 @@ smstb.tv.InlineListRenderer = function() {
 goog.inherits(smstb.tv.InlineListRenderer, smstb.tv.ComponentRenderer);
 goog.addSingletonGetter(smstb.tv.InlineListRenderer);
 
+
 /**
  * The class name to use for the component.
  * @type {string}
@@ -117,30 +132,39 @@ goog.addSingletonGetter(smstb.tv.InlineListRenderer);
  */
 smstb.tv.InlineListRenderer.CSS_CLASS = goog.getCssName('tv-inline-list');
 
+
 goog.scope(function() {
 
-  var _ = smstb.tv.InlineListRenderer.prototype;
-  /** @inheritDoc */
-  _.getCssClass = function() {
-    return smstb.tv.InlineListRenderer.CSS_CLASS;
-  };
-  /** @inheritDoc */
-  _.decorate = function(comp, el) {
-    var elem = goog.base(this, 'decorate', comp, el);
-    elem.appendChild(goog.dom.htmlToDocumentFragment(
+var _ = smstb.tv.InlineListRenderer.prototype;
+
+
+/** @inheritDoc */
+_.getCssClass = function() {
+  return smstb.tv.InlineListRenderer.CSS_CLASS;
+};
+
+
+/** @inheritDoc */
+_.decorate = function(comp, el) {
+  var elem = goog.base(this, 'decorate', comp, el);
+  elem.appendChild(goog.dom.htmlToDocumentFragment(
       smstb.template.inlinelist({})));
-    return elem;
-  };
-  /** @inheritDoc */
-  _.getContentElement = function(el) {
-    return el.querySelector(goog.getCssName(
+  return elem;
+};
+
+
+/** @inheritDoc */
+_.getContentElement = function(el) {
+  return el.querySelector(goog.getCssName(
       smstb.tv.InlineListRenderer.CSS_CLASS, 'value')) || el;
-  };
-});
+};
+
+});  // goog.scope
+
 
 /**
  * Register automatic decorator.
  */
 smstb.tv.decorator.register(
-  smstb.tv.InlineListRenderer.getInstance().getCssClass(),
-  smstb.tv.InlineList);
+    smstb.tv.InlineListRenderer.getInstance().getCssClass(),
+    smstb.tv.InlineList);

@@ -4,6 +4,8 @@ goog.require('goog.Disposable');
 goog.require('smstb.transport.Query');
 goog.require('smstb.transport.smjspackage.Base');
 
+
+
 /**
  * Implementation fof the Query interface over SMJS.
  * @constructor
@@ -20,10 +22,11 @@ smstb.transport.smjs.Query = function(source) {
     throw new Error('Cannot find payload for source');
   }
   source['newif'] = 1;
-  this.query_ = new smstb.transport.smjspackage.Base(
-    /** @type {Object} */ (source));
+  this.query_ = new smstb.transport.smjspackage.Base(/** @type {Object} */(
+      source));
 };
 goog.inherits(smstb.transport.smjs.Query, goog.Disposable);
+
 
 /**
  * Implements the send method in the interface.
@@ -35,12 +38,14 @@ smstb.transport.smjs.Query.prototype.send = function(callback) {
   this.query_.send(callback);
 };
 
+
 /** @inheritDoc */
 smstb.transport.smjs.Query.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   goog.dispose(this.query_);
   this.query_ = null;
 };
+
 
 /**
  * Retrieves the payload for a known source.
@@ -51,6 +56,7 @@ smstb.transport.smjs.Query.prototype.disposeInternal = function() {
 smstb.transport.smjs.Query.prototype.getSourceFromEnumeration = function(eid) {
   return smstb.transport.smjs.Query.Payload[eid];
 };
+
 
 /**
  * Enumerated the available known sources. Note that those are not

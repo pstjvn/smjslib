@@ -4,6 +4,8 @@ goog.require('smstb.Remote.Keys');
 goog.require('smstb.tv.ButtonRenderer');
 goog.require('smstb.tv.Component');
 
+
+
 /**
  * My new class description
  * @constructor
@@ -16,20 +18,23 @@ smstb.tv.Button = function(opt_r) {
 };
 goog.inherits(smstb.tv.Button, smstb.tv.Component);
 
+
 smstb.tv.decorator.register(
-  smstb.tv.ButtonRenderer.getInstance().getCssClass(), smstb.tv.Button);
+    smstb.tv.ButtonRenderer.getInstance().getCssClass(), smstb.tv.Button);
+
 
 goog.scope(function() {
 
-  var _ = smstb.tv.Button.prototype;
+var _ = smstb.tv.Button.prototype;
 
-  /** @inheritDoc */
-  _.handleKey = function(key) {
-    if (key == smstb.Remote.Keys.OK) {
-      this.performActionInternal(null);
-    } else {
-      goog.base(this, 'handleKey', key);
-    }
-  };
 
-});
+/** @inheritDoc */
+_.handleKey = function(key) {
+  if (key == smstb.Remote.Keys.OK) {
+    this.performActionInternal(null);
+  } else {
+    goog.base(this, 'handleKey', key);
+  }
+};
+
+});  // goog.scope

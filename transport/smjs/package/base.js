@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Provides a base package for communication over smjs protocols.
+ *
+ * @author regardingscot@gmail.com (Peter StJ)
+ */
+
 goog.provide('smstb.transport.smjspackage.Base');
 
 goog.require('goog.Disposable');
@@ -6,23 +12,20 @@ goog.require('smstb.transport.smjs.Dispatcher');
 goog.require('smstb.transport.smjspackage.Request');
 goog.require('smstb.vendor.Smjs');
 
-/**
- * @fileoverview Provides a base package for communication over smjs protocols.
- *
- * @author regardingscot@gmail.com (Peter StJ)
- */
+
 
 /**
  * @constructor
  * @param {Object} data The payload part of the package.
- * @param {string=} method Optional method to use for transport.
+ * @param {string=} opt_method Optional method to use for transport.
  * @extends {goog.Disposable}
  */
-smstb.transport.smjspackage.Base = function(data, method) {
+smstb.transport.smjspackage.Base = function(data, opt_method) {
   goog.base(this);
-  this.request = new smstb.transport.smjspackage.Request(data, method);
+  this.request = new smstb.transport.smjspackage.Request(data, opt_method);
 };
 goog.inherits(smstb.transport.smjspackage.Base, goog.Disposable);
+
 
 /**
  * Implements the sending sequence.
@@ -31,9 +34,10 @@ goog.inherits(smstb.transport.smjspackage.Base, goog.Disposable);
  */
 smstb.transport.smjspackage.Base.prototype.send = function(callback) {
   smstb.transport.smjs.Dispatcher.getInstance().register(this.request.getTag(),
-    (callback));
+      callback);
   smstb.vendor.Smjs.getInstance().cmd(this.getAsString());
 };
+
 
 /**
  * Utility method to convert the package to a string to be sent over.
@@ -42,6 +46,7 @@ smstb.transport.smjspackage.Base.prototype.send = function(callback) {
 smstb.transport.smjspackage.Base.prototype.getAsString = function() {
   return goog.json.serialize(this.request);
 };
+
 
 /** @inheritDoc */
 smstb.transport.smjspackage.Base.prototype.disposeInternal = function() {

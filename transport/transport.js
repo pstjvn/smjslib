@@ -6,6 +6,8 @@ goog.require('smstb.transport.jsonp.Query');
 goog.require('smstb.transport.smjs.Query');
 goog.require('smstb.transport.xhr.Query');
 
+
+
 /**
  * Provides the transport interface abstraction. Do not instanciate this
  *   class, instead use the 'getInstance' method.
@@ -16,6 +18,7 @@ smstb.transport.Transport = function() {
   this.query_ = this.selectBackend_();
 };
 goog.addSingletonGetter(smstb.transport.Transport);
+
 
 /**
  * The known transport types.
@@ -28,11 +31,13 @@ smstb.transport.Transport.Type = {
   BINARY: 3
 };
 
+
 /**
  * The query constructor function to use.
  * @type {function(new: smstb.transport.Query, *): undefined}
  */
 smstb.transport.Transport.prototype.query_;
+
 
 /**
  * The transport type selected in the transport abstraction.
@@ -41,6 +46,7 @@ smstb.transport.Transport.prototype.query_;
  */
 smstb.transport.Transport.prototype.type_;
 
+
 /**
  * Accessor method for debugging.
  * @return {number} The selected backend type enumerable id.
@@ -48,6 +54,7 @@ smstb.transport.Transport.prototype.type_;
 smstb.transport.Transport.prototype.getSelectedBackendType = function() {
   return this.type_;
 };
+
 
 /**
  * Helper function that retrieves the named source from the backend using the
@@ -58,10 +65,11 @@ smstb.transport.Transport.prototype.getSelectedBackendType = function() {
  *   the returned data.
  */
 smstb.transport.Transport.prototype.getSourceFromName = function(sourceName,
-  callback) {
+    callback) {
   var query = new this.query_(sourceName);
   query.send(goog.bind(this.handleResponse, this, callback));
 };
+
 
 /**
  * Handles the response of the query. As several transformation and contracts
@@ -74,7 +82,7 @@ smstb.transport.Transport.prototype.getSourceFromName = function(sourceName,
  * @protected
  */
 smstb.transport.Transport.prototype.handleResponse = function(callback,
-  response) {
+    response) {
   var err = null;
   if (response instanceof Error) {
     err = response;
@@ -87,6 +95,7 @@ smstb.transport.Transport.prototype.handleResponse = function(callback,
   goog.dispose(response);
 };
 
+
 /**
  * Inetrnal backend selection logic. It is run automatically on instantiation.
  * @private
@@ -95,9 +104,9 @@ smstb.transport.Transport.prototype.handleResponse = function(callback,
  */
 smstb.transport.Transport.prototype.selectBackend_ = function() {
   var backend = /** @type {smstb.transport.Transport.Type} */ +(
-    pstj.configure.getRuntimeValue('BACKEND',
-      this.getUsableTransportAssumption_(),
-    smstb.transport.config.prefix));
+      pstj.configure.getRuntimeValue('BACKEND',
+          this.getUsableTransportAssumption_(),
+          smstb.transport.config.prefix));
 
   this.type_ = backend;
   // Lie to the compiler
@@ -119,8 +128,9 @@ smstb.transport.Transport.prototype.selectBackend_ = function() {
       selection = smstb.transport.jsonp.Query;
   }
   return /** @type {function(new: smstb.transport.Query, *): undefined} */ (
-    selection);
+      selection);
 };
+
 
 /**
  * Look up suitable transport mechanism internally in case none is configured
@@ -130,7 +140,6 @@ smstb.transport.Transport.prototype.selectBackend_ = function() {
  *   variables in different devices.
  */
 smstb.transport.Transport.prototype.getUsableTransportAssumption_ = function() {
-  var transport = -1;
   if (goog.global['smjs']) {
     if (goog.isFunction(goog.global['smjs']['getVersion'])) {
       if ((/Android/).test(goog.global['smjs']['getVersion'])) {

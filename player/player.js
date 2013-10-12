@@ -127,15 +127,16 @@ smstb.player.Player.prototype.handleStop = function(e) {
 /**
  * Plays a record via the internal player.
  * @param {pstj.ds.ListItem} record The reocrd to play.
- * @param {boolean=} resume True if we should attempt to continue playback
+ * @param {boolean=} opt_resume True if we should attempt to continue playback
  *   from the same point it was stopped.
- * @param {boolean=} should_record True if we should attempt to record the
+ * @param {boolean=} opt_should_resume True if we should attempt to record the
  *   stream.
- * @param {string=} pass Optionally the password to unlock locked items.
- * @param {boolean=} allow_payment True if payment was explicitly allowed
+ * @param {string=} opt_pass Optionally the password to unlock locked items.
+ * @param {boolean=} opt_allow_payment True if payment was explicitly allowed
  *   for this item.
  */
-smstb.player.Player.prototype.play = function(record, resume, should_record, pass, allow_payment) {
+smstb.player.Player.prototype.play = function(record, opt_resume,
+    opt_should_resume, opt_pass, opt_allow_payment) {
 
   var uri = record.getProp(smstb.ds.Record.Property.PLAYURL);
 
@@ -145,37 +146,34 @@ smstb.player.Player.prototype.play = function(record, resume, should_record, pas
     return;
   }
   if (this.player_.isParentalLockSupported() &&
-    record.getProp(smstb.ds.Record.Property.LOCKED)) {
+      record.getProp(smstb.ds.Record.Property.LOCKED)) {
 
-    if (!goog.isString(pass) || !this.player_.passMatches(pass)) {
+    if (!goog.isString(pass) || !this.player_.passMatches(opt_pass)) {
       // emit event that should notify interface implementation that we desire
       // to ask for pass.
       this.dispatchEvent(new smstb.player.Player.QueryEvent(
-        smstb.player.Player.EventType.NEEDS_PASS,
-        /**
-         * @type {function(smstb.player.Player.QueryEvent.bos_): undefined}
-         */
-        (goog.bind(this.play, this, record, resume, should_record))));
+          smstb.player.Player.EventType.NEEDS_PASS,
+          /** @type {function(smstb.player.Player.QueryEvent.bos_): undefined}*/
+          (goog.bind(this.play, this, record, opt_resume, opt_should_resume))));
       return;
     }
   }
 
   if (record.getProp(smstb.ds.Record.Property.COST) &&
-    +record.getProp(smstb.ds.Record.Property.COST) > 0) {
+      +record.getProp(smstb.ds.Record.Property.COST) > 0) {
 
-    if (allow_payment != true) {
+    if (opt_allow_payment != true) {
       this.dispatchEvent(new smstb.player.Player.QueryEvent(
-        smstb.player.Player.EventType.NEEDS_PAYMENT_CONFIRMATION,
-        /**
-         * @type {function(smstb.player.Player.QueryEvent.bos_): undefined}
-         */
-        (goog.bind(this.play, this, record, resume, should_record, pass))));
+          smstb.player.Player.EventType.NEEDS_PAYMENT_CONFIRMATION,
+          /**@type {function(smstb.player.Player.QueryEvent.bos_): undefined}*/
+          (goog.bind(this.play, this, record, opt_resume, opt_should_resume,
+              opt_pass))));
       return;
     }
   }
 
   this.current_ = record;
-  this.player_.play(record, resume, should_record, this.disableCam_);
+  this.player_.play(record, opt_resume, opt_should_resume, this.disableCam_);
 };
 
 
@@ -236,6 +234,7 @@ smstb.player.Player.prototype.disableCamera = function(nocam) {
 smstb.player.Player.prototype.getCurrentItem = function() {
   return this.current_;
 };
+
 
 
 /**

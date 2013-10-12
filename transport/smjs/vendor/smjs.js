@@ -1,15 +1,16 @@
+/**
+ * @fileoverview Provides asbtracted model over the smjs host object found in
+ * the Sysmaster STB devices of the M series.
+ *
+ * @author regardingscot@gmail.com (Peter StJ)
+ */
+
 goog.provide('smstb.vendor.Smjs');
 
 goog.require('smstb.transport.smjs.Dispatcher');
 goog.require('smstb.vendor.ESmjs');
 
 
-/**
- * @fileoverview Provides asbtracted model over the smjs host object found in
- *   the Sysmaster STB devices of the M series.
- *
- * @author regardingscot@gmail.com (Peter StJ)
- */
 
 /**
  * The smjs wrapper class. The class is designed to not be instanciated,
@@ -17,6 +18,22 @@ goog.require('smstb.vendor.ESmjs');
  * @constructor
  */
 smstb.vendor.Smjs = function() {
+  /**
+   * Flag is set to true when the initialization completes, used to prevent
+   *   re-initialization.
+   * @type {boolean}
+   * @private
+   */
+  this.hasBeenInited_ = false;
+  /**
+   * Flag that is set to true when the emulated instance is used. It requires
+   *   websocket in the host and socket server enabled in the STB and us ised
+   *   mainly for development.
+   * @type {boolean}
+   * @private
+   */
+  this.emulated_ = false;
+
   if (goog.isDef(goog.global['smjs'])) {
     this.smjs_ = goog.global['smjs'];
   } else {
@@ -27,22 +44,6 @@ smstb.vendor.Smjs = function() {
 };
 goog.addSingletonGetter(smstb.vendor.Smjs);
 
-/**
- * Flag is set to true when the initialization completes, used to prevent
- *   re-initialization.
- * @type {boolean}
- * @private
- */
-smstb.vendor.Smjs.prototype.hasBeenInited_ = false;
-
-/**
- * Flag that is set to true when the emulated instance is used. It requires
- *   websocket in the host and socket server enabled in the STB and us ised
- *   mainly for development.
- * @type {boolean}
- * @private
- */
-smstb.vendor.Smjs.prototype.emulated_ = false;
 
 /**
  * The method is copied from the original host implementation but is alled
@@ -60,10 +61,11 @@ smstb.vendor.Smjs.prototype.initAPI_ = function() {
   if (!this.isEmulated()) {
     var dispatcher = smstb.transport.smjs.Dispatcher.getInstance();
     goog.exportSymbol(smstb.vendor.Smjs.DEFAULT_HANDLER_NAME_,
-      goog.bind(dispatcher.process, dispatcher));
+        goog.bind(dispatcher.process, dispatcher));
   }
   this.setHandler_(smstb.vendor.Smjs.DEFAULT_HANDLER_NAME_);
 };
+
 
 /**
  * Wraps the host object emthod for setting the symbol name to call with
@@ -75,6 +77,7 @@ smstb.vendor.Smjs.prototype.setHandler_ = function(symbol) {
   this.smjs_['set_json_handler'](symbol);
 };
 
+
 /**
  * Wraps the command calling method of the host object. It expects string
  *   (JSON string).
@@ -83,6 +86,7 @@ smstb.vendor.Smjs.prototype.setHandler_ = function(symbol) {
 smstb.vendor.Smjs.prototype.cmd = function(command) {
   this.smjs_['jsoncmd'](command);
 };
+
 
 /**
  * Wraps the host object API for configuring the OSD in the native STB player.
@@ -99,6 +103,7 @@ smstb.vendor.Smjs.prototype.setOSDFlags = function(flags) {
   this.smjs_['setosdflags'](flags);
 };
 
+
 /**
  * Accessor method to check if the environment is emulating the smjs object or
  *   the vendor one is used.
@@ -108,6 +113,7 @@ smstb.vendor.Smjs.prototype.isEmulated = function() {
   return this.emulated_;
 };
 
+
 /**
  * The global callback name.
  * @type {string}
@@ -115,6 +121,7 @@ smstb.vendor.Smjs.prototype.isEmulated = function() {
  * @final
  */
 smstb.vendor.Smjs.DEFAULT_HANDLER_NAME_ = 'jsonReceiver';
+
 
 /**
  * The OSD flags that are supported.

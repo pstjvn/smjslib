@@ -3,6 +3,8 @@ goog.provide('smstb.transport.smjs.Dispatcher');
 goog.require('smstb.transport.smjs.Response');
 goog.require('smstb.transport.smjs.pubsub');
 
+
+
 /**
  * @constructor
  */
@@ -12,19 +14,16 @@ smstb.transport.smjs.Dispatcher = function() {
    * @type {Object}
    */
   this.cache_ = {};
-  /**
-   * @private
-   * @type {Object}
-   */
-  this.handlers_ = {};
 };
 goog.addSingletonGetter(smstb.transport.smjs.Dispatcher);
+
 
 /**
  * Flushes the buffers and processes the error that caused it.
  * @param {Error} err The error responsible for the flush.
  */
 smstb.transport.smjs.Dispatcher.prototype.flush = function(err) {};
+
 
 /**
  * We should only be called with objects! This method is also exported thus we
@@ -73,6 +72,7 @@ smstb.transport.smjs.Dispatcher.prototype.process = function(jobject) {
   goog.dispose(response);
 };
 
+
 /**
  * Registers a new command that expectd response from the backend with a
  *   handler.
@@ -83,6 +83,7 @@ smstb.transport.smjs.Dispatcher.prototype.process = function(jobject) {
 smstb.transport.smjs.Dispatcher.prototype.register = function(tag, callback) {
   this.cache_[tag] = callback;
 };
+
 
 /**
  * Checks internally if the package has designated resolved (added by matching
