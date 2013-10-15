@@ -40,9 +40,12 @@ smstb.widget.TVPlayer.PLAY_TYPE = '&t=1';
 /** @inheritDoc */
 smstb.widget.TVPlayer.prototype.decorateInternal = function(el) {
   goog.base(this, 'decorateInternal', el);
-  this.player_ = this.createPlayer();
-  this.addChild(this.player_);
-  this.player_.decorate(this.getElement().querySelector('video'));
+  try {
+    this.player_ = this.createPlayer();
+  } catch (e) {
+    alert('You seem to be blocking Flash, please enable it and try again');
+    return;
+  }
   this.backButton.decorate(this.getElementByClass(
       goog.getCssName('backbutton')));
 };
@@ -93,9 +96,13 @@ smstb.widget.TVPlayer.prototype.createPlayer = function() {
       break;
     case 'ios':
       player = new smstb.widget.TagPlayer();
+      this.addChild(player);
+      player.decorate(this.getElement().querySelector('video'));
       break;
     case 'pc':
       player = new smstb.widget.FlashPlayer();
+      this.addChild(player);
+      player.decorate(this.getElement().querySelector('video'));
       break;
     default:
       throw new Error('Platform unknown');
