@@ -65,7 +65,7 @@ smstb.widget.TVPlayer.prototype.enterDocument = function() {
         this.setActive(false);
       });
   this.getHandler().listen(this, smstb.player.EventType.PAUSE, function(e) {
-        this.setActive(true);
+        this.setActive(false);
       });
 };
 
