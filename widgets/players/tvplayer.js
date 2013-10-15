@@ -1,6 +1,8 @@
 goog.provide('smstb.widget.TVPlayer');
 
-goog.require('goog.ui.Component');
+goog.require('goog.ui.Control');
+goog.require('goog.ui.ControlRenderer');
+goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.ControlRenderer');
 goog.require('pstj.ui.Button');
@@ -16,17 +18,20 @@ goog.require('smstb.widget.TagPlayer');
 
 /**
  * @constructor
- * @extends {goog.ui.Component}
+ * @extends {goog.ui.Control}
  */
 smstb.widget.TVPlayer = function() {
-  goog.base(this);
+  goog.base(this, '', goog.ui.ControlRenderer.getCustomRenderer(
+      goog.ui.ControlRenderer, goog.getCssName('right')));
+  this.setHandleMouseEvents(false);
+  this.setAutoStates(goog.ui.Component.State.ALL, false);
   this.backButton = new pstj.ui.Button(
       /** @type {pstj.ui.CustomButtonRenderer} */ (
       goog.ui.ControlRenderer.getCustomRenderer(
       pstj.ui.CustomButtonRenderer, goog.getCssName('backbutton'))));
   this.player_ = null;
 };
-goog.inherits(smstb.widget.TVPlayer, goog.ui.Component);
+goog.inherits(smstb.widget.TVPlayer, goog.ui.Control);
 
 
 /**
@@ -57,13 +62,10 @@ smstb.widget.TVPlayer.prototype.enterDocument = function() {
   this.getHandler().listen(this.backButton,
       goog.ui.Component.EventType.ACTION, function(e) {
         e.stopPropagation();
-        goog.dom.classlist.enable(this.getElement(),
-            goog.getCssName('right-active'), false);
+        this.setActive(false);
       });
-  this.getHandler().listen(this, smstb.player.EventType.PAUSE,
-      function(e) {
-        goog.dom.classlist.remove(this.getElement(), goog.getCssName(
-            'right-active'));
+  this.getHandler().listen(this, smstb.player.EventType.PAUSE, function(e) {
+        this.setActive(true);
       });
 };
 
@@ -77,8 +79,7 @@ smstb.widget.TVPlayer.prototype.setModel = function(model) {
   this.player_.setModel(this.getModel().getProp(
       smstb.ds.Record.Property.PLAYURL) +
       smstb.widget.TVPlayer.PLAY_TYPE);
-  goog.dom.classlist.enable(this.getElement(), goog.getCssName(
-      'right-active'), true);
+  this.setActive(true);
 };
 
 
