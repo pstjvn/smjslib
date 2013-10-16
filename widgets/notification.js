@@ -30,7 +30,7 @@ smstb.widget.Notification = function() {
   goog.base(this);
   this.delay_ = new goog.async.Delay(function() {
     this.enable(false);
-  }, 3500, this);
+  }, 1500, this);
   this.registerDisposable(this.delay_);
   this.enabled_ = false;
   this.needsUpdate_ = false;
