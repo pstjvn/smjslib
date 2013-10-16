@@ -1,9 +1,8 @@
 goog.provide('smstb.widget.TVPlayer');
 
-goog.require('goog.ui.Control');
-goog.require('goog.ui.ControlRenderer');
-goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Component.EventType');
+goog.require('goog.ui.Component.State');
+goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlRenderer');
 goog.require('pstj.ui.Button');
 goog.require('pstj.ui.CustomButtonRenderer');
@@ -65,8 +64,8 @@ smstb.widget.TVPlayer.prototype.enterDocument = function() {
         this.setActive(false);
       });
   this.getHandler().listen(this, smstb.player.EventType.PAUSE, function(e) {
-        this.setActive(false);
-      });
+    this.setActive(false);
+  });
 };
 
 
