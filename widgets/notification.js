@@ -33,16 +33,44 @@ smstb.widget.Notification = function() {
   }, 1500, this);
   this.registerDisposable(this.delay_);
   this.enabled_ = false;
-  this.needsUpdate_ = false;
 };
 goog.inherits(smstb.widget.Notification, goog.ui.Component);
+
+
+/** @inheritDoc */
+smstb.widget.Notification.prototype.enterDocument = function() {
+  goog.base(this, 'enterDocument');
+  this.getHandler().listen(this.getElement(),
+      [goog.events.EventType.CLICK,
+        goog.events.EventType.TOUCHSTART], this.handleClick);
+};
+
+
+/**
+ * Handler for the click / touch events. It is exported so subclassing can
+ * override the default behavior. Default being 'hide' the UI.
+ * @param {goog.events.Event} e The wrapped browser click/touchstart event.
+ * @protected
+ */
+smstb.widget.Notification.prototype.handleClick = function(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  this.enable(false);
+};
 
 
 /** @inheritDoc */
 smstb.widget.Notification.prototype.setModel = function(model) {
   if (goog.isString(model)) {
     if (this.getModel() instanceof pstj.ds.ListItem) {
-      this.getModel().mutate('text', model);
+      // If enabled combine the old and new message intead of replacing the
+      // old one
+      if (this.enabled_) {
+        this.getModel().mutate('text', this.getModel().getProp('text') +
+            '<br>' + model);
+      } else {
+        this.getModel().mutate('text', model);
+      }
     } else {
       goog.base(this, 'setModel', new pstj.ds.ListItem({
         'id': 1,
@@ -55,27 +83,7 @@ smstb.widget.Notification.prototype.setModel = function(model) {
     throw new Error(
         'The model for notification should either be a string or a list item');
   }
-  if (this.enabled_) {
-    this.needsUpdate_ = true;
-  } else {
-    pstj.ui.ngAgent.getInstance().apply(this);
-    this.needsUpdate_ = false;
-  }
   this.enable(true);
-  this.delay_.start();
-};
-
-
-/** @inheritDoc */
-smstb.widget.Notification.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
-  this.getHandler().listen(this.getElement(),
-      [goog.events.EventType.CLICK,
-        goog.events.EventType.TOUCHSTART], function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        this.enable(false);
-      });
 };
 
 
@@ -84,15 +92,25 @@ smstb.widget.Notification.prototype.enterDocument = function() {
  * @param {boolean} enable If ture the component will be shown.
  */
 smstb.widget.Notification.prototype.enable = function(enable) {
-  if (this.needsUpdate_) {
+  if (enable) {
     pstj.ui.ngAgent.getInstance().apply(this);
-    this.needsUpdate_ = false;
-    enable = true;
-  }
-  if (!enable) {
-    this.delay_.stop();
   }
   this.enabled_ = enable;
   goog.dom.classes.enable(this.getElement(), goog.getCssName('active'), enable);
+  this.enableHideDelay(enable);
+};
+
+
+/**
+ * Starts or stops the delay of hiding the notification.
+ * @param {boolean} enable If true starts the delay for hiding.
+ * @protected
+ */
+smstb.widget.Notification.prototype.enableHideDelay = function(enable) {
+  if (enable) {
+    this.delay_.start();
+  } else {
+    this.delay_.stop();
+  }
 };
 
