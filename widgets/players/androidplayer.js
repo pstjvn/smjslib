@@ -29,4 +29,4 @@ smstb.widget.AndroidPlayer.prototype.setModel = function(url) {
  * @final
  */
 smstb.widget.AndroidPlayer.PREFIX =
-    'http://longa.com/webapp/android/longaapp.html?url=';
+    'longa://longa.com/webapp/android/longaapp.html?url=';
