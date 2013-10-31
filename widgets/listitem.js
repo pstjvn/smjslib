@@ -13,9 +13,12 @@ goog.require('goog.string');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Control');
 goog.require('pstj.configure');
+goog.require('pstj.ds.ListItem');
+goog.require('pstj.ds.ListItem.EventType');
 goog.require('pstj.ui.Button');
 goog.require('pstj.ui.EmbededButtonRenderer');
 goog.require('pstj.ui.ListItemRenderer');
+goog.require('pstj.ui.Touchable.EventType');
 goog.require('smstb.ds.Record');
 goog.require('smstb.template');
 
@@ -93,7 +96,8 @@ _.generateTemplateData = function(control) {
     thumbnail: this.getThumbnail_(control),
     cost: control.getModel().getProp(smstb.ds.Record.Property.COST),
     currency: control.getModel().getProp(smstb.ds.Record.Property.CURRENCY),
-    isdir: control.getModel().getProp(smstb.ds.Record.Property.ISDIR)
+    isdir: control.getModel().getProp(smstb.ds.Record.Property.ISDIR),
+    bookmarked: control.getModel().getProp(smstb.ds.Record.Property.BOOKMARKED)
   };
 };
 
@@ -135,6 +139,11 @@ smstb.widget.ListItem = function(opt_renderer) {
       'PLATFORM', 'pc', 'SYSMASTER.APPS.MOBILETV') != 'pc') {
     this.setSupportedState(goog.ui.Component.State.HOVER, false);
   }
+  /**
+   * The GUIDE button.
+   * @type {pstj.ui.Button}
+   * @protected
+   */
   this.epgguide = new pstj.ui.Button(
       /** @type {pstj.ui.CustomButtonRenderer} */(
       goog.ui.ControlRenderer.getCustomRenderer(
@@ -146,6 +155,18 @@ smstb.widget.ListItem = function(opt_renderer) {
    * @private
    */
   this.buttonWasActive_ = false;
+  /**
+   * Delays the handler for a long press.
+   * @type {goog.async.Delay}
+   * @private
+   */
+  this.longPressDelay_ = new goog.async.Delay(this.handleLongPress, 500, this);
+  /**
+   * The bookmarked element in the DOM.
+   * @type {?Element}
+   * @private
+   */
+  this.bookmarkedElement_ = null;
 };
 goog.inherits(smstb.widget.ListItem, goog.ui.Control);
 
@@ -171,6 +192,60 @@ smstb.widget.ListItem.prototype.enterDocument = function() {
         this.handleEpgGuideButton);
   } else {
     goog.dispose(this.epgguide);
+  }
+  this.bookmarkedElement_ = this.getElementByClass(goog.getCssName(
+      'playable-list-item-bookmarked'));
+  if (!goog.isNull(this.getModel())) {
+    this.getHandler().listen(goog.asserts.assertInstanceof(
+        this.getModel(), pstj.ds.ListItem,
+        'The model should be a ListItem instance'),
+        pstj.ds.ListItem.EventType.UPDATE,
+        this.handleModelUpdate);
+    this.setBookmarked(this.getModel().getProp(
+        smstb.ds.Record.Property.BOOKMARKED));
+  }
+};
+
+
+/**
+ * Allows us to catch long presses.
+ * @override
+ */
+smstb.widget.ListItem.prototype.setState = function(state, enable) {
+  if (state == goog.ui.Component.State.ACTIVE) {
+    if (!this.isActive() && enable) {
+      this.enableLongPressDelay(true);
+    } else if (!enable) {
+      this.enableLongPressDelay(false);
+    }
+  }
+  goog.base(this, 'setState', state, enable);
+};
+
+
+/**
+ * Called when the item is first activated.
+ * @protected
+ * @param {boolean} enable If the delay should be enabled or disabled.
+ */
+smstb.widget.ListItem.prototype.enableLongPressDelay = function(enable) {
+  if (enable) {
+    this.longPressDelay_.start();
+  } else {
+    this.longPressDelay_.stop();
+  }
+};
+
+
+/**
+ * Handles the long press detection. Removes the active state and dispatches
+ * the LONG_PRESS touchable event.
+ * @protected
+ */
+smstb.widget.ListItem.prototype.handleLongPress = function() {
+  if (this.isActive()) {
+    this.setActive(false);
+    this.dispatchEvent(pstj.ui.Touchable.EventType.LONG_PRESS);
   }
 };
 
@@ -206,4 +281,24 @@ smstb.widget.ListItem.prototype.getActionType = function() {
   }
   this.buttonWasActive_ = false;
   return result;
+};
+
+
+/**
+ * Sets the bookmarked property on the UI of the element.
+ * @param {boolean} bookmarked If true shows the Bookmark icon.
+ * @protected
+ */
+smstb.widget.ListItem.prototype.setBookmarked = function(bookmarked) {
+  this.bookmarkedElement_.style.display = ((bookmarked) ? 'block' : 'none');
+};
+
+
+/**
+ * Called when the model is updated externally.
+ * @protected
+ */
+smstb.widget.ListItem.prototype.handleModelUpdate = function() {
+  this.setBookmarked(!!this.getModel().getProp(
+      smstb.ds.Record.Property.BOOKMARKED));
 };
