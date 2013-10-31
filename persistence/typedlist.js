@@ -17,12 +17,16 @@ smstb.persistence.TypedList = function(key) {
    */
   this.key_ = key;
   this.mechanizm = smstb.persistence.Storage.getInstance();
+  if (goog.isNull(this.mechanizm)) {
+    throw new Error('Your device seem to not support storage.<br>' +
+        'If you are using iOS, make sure prive browsing is off.');
+  }
 };
 
 
 /**
  * Stores the value of the typed object to the persistance data store.
- * @param {pstj.ds.List} list The list to store.
+ * @param {Array.<*>|pstj.ds.List} list The list to store.
  */
 smstb.persistence.TypedList.prototype.set = function(list) {
   this.mechanizm.set(this.key_, this.serialize(list));
@@ -31,7 +35,7 @@ smstb.persistence.TypedList.prototype.set = function(list) {
 
 /**
  * Retrieves the value from the storage.
- * @return {!Array.<Object>}
+ * @return {!Array.<*>}
  */
 smstb.persistence.TypedList.prototype.get = function() {
 
@@ -41,16 +45,16 @@ smstb.persistence.TypedList.prototype.get = function() {
 
     value = this.revive(/** @type {string} */ (value));
     if (goog.isArray(value)) {
-      return /** @type {!Array.<Object>} */ (value);
+      return /** @type {!Array.<*>} */ (value);
     }
   }
-  return /** @type {!Array.<Object>} */ ([]);
+  return /** @type {!Array.<*>} */ ([]);
 };
 
 
 /**
  * Converts typed object to serialized value.
- * @param {pstj.ds.List} list The list to serialize.
+ * @param {Array.<*>|pstj.ds.List} list The list to serialize.
  * @return {string}
  * @protected
  */
