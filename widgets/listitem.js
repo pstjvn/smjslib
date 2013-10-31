@@ -8,6 +8,7 @@ goog.provide('smstb.widget.ListItem');
 goog.provide('smstb.widget.ListItem.Action');
 goog.provide('smstb.widget.ListItemRenderer');
 
+goog.require('goog.async.Delay');
 goog.require('goog.dom');
 goog.require('goog.string');
 goog.require('goog.ui.Component.State');
@@ -167,6 +168,9 @@ smstb.widget.ListItem = function(opt_renderer) {
    * @private
    */
   this.bookmarkedElement_ = null;
+  this.bookMarkFXDelay_ = new goog.async.Delay(function() {
+    goog.dom.classlist.remove(this.getElement(), goog.getCssName('bookmarked'));
+  }, 1100, this);
 };
 goog.inherits(smstb.widget.ListItem, goog.ui.Control);
 
@@ -202,7 +206,7 @@ smstb.widget.ListItem.prototype.enterDocument = function() {
         pstj.ds.ListItem.EventType.UPDATE,
         this.handleModelUpdate);
     this.setBookmarked(this.getModel().getProp(
-        smstb.ds.Record.Property.BOOKMARKED));
+        smstb.ds.Record.Property.BOOKMARKED), true);
   }
 };
 
@@ -287,9 +291,15 @@ smstb.widget.ListItem.prototype.getActionType = function() {
 /**
  * Sets the bookmarked property on the UI of the element.
  * @param {boolean} bookmarked If true shows the Bookmark icon.
+ * @param {boolean=} suppers_fx If true do not trigger the FX.
  * @protected
  */
-smstb.widget.ListItem.prototype.setBookmarked = function(bookmarked) {
+smstb.widget.ListItem.prototype.setBookmarked = function(
+    bookmarked, suppers_fx) {
+  if (!suppers_fx) {
+    goog.dom.classlist.add(this.getElement(), goog.getCssName('bookmarked'));
+    this.bookMarkFXDelay_.start();
+  }
   this.bookmarkedElement_.style.display = ((bookmarked) ? 'block' : 'none');
 };
 
