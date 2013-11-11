@@ -17,6 +17,9 @@ goog.require('pstj.ds.Cache');
  * Provides the epg cache. Extends the base class by checking for timeout for
  * the cache.
  * @constructor
+ * @deprecated This class assumes the epg record for each channel is
+ * loaded at a different time, which is no longer true. Use the app EpgStrict
+ * instead!
  * @extends {pstj.ds.Cache}
  */
 smstb.ds.Epg.Cache = function() {
