@@ -291,12 +291,12 @@ smstb.widget.ListItem.prototype.getActionType = function() {
 /**
  * Sets the bookmarked property on the UI of the element.
  * @param {boolean} bookmarked If true shows the Bookmark icon.
- * @param {boolean=} suppers_fx If true do not trigger the FX.
+ * @param {boolean=} opt_suppers_fx If true do not trigger the FX.
  * @protected
  */
 smstb.widget.ListItem.prototype.setBookmarked = function(
-    bookmarked, suppers_fx) {
-  if (!suppers_fx) {
+    bookmarked, opt_suppers_fx) {
+  if (!opt_suppers_fx) {
     goog.dom.classlist.add(this.getElement(), goog.getCssName('bookmarked'));
     this.bookMarkFXDelay_.start();
   }
