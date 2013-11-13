@@ -127,6 +127,7 @@
   * @param cost The cost of the item.
   * @param currency The currency of the cost.
   * @param isdir If the item is a directory.
+  * @param isiptv If the item will display IPTV data.
   */
 {template .mobileItem}
   <div class="{css stream-item}">
@@ -137,7 +138,32 @@
           <img src="{$thumbnail}" alt="channel thumbnail" class="{css poster}">
         </div>
         <div class="{css playable-list-item-title}">{$title}</div>
-        <div class="{css playable-list-item-description}">{$description}</div>
+        {if $isiptv == true}
+          <div class="{css playable-list-item-description}">
+            <div class="{css playable-list-item-epg-widget}">
+              <div class="{css epg-widget-item}">
+                <div class="{css epg-widget-item-wrapper}">
+                  <div class="{css epg-widget-item-start-time}" data-model="startTime" data-filter="datetime(hh:mm)"></div>
+                  <div class="{css epg-widget-item-name}" data-model="publishName"></div>
+                </div>
+              </div>
+              <div class="{css epg-widget-item}">
+                <div class="{css epg-widget-item-wrapper}">
+                  <div class="{css epg-widget-item-start-time}" data-model="startTime" data-filter="datetime(hh:mm)"></div>
+                  <div class="{css epg-widget-item-name}" data-model="publishName"></div>
+                </div>
+              </div>
+              <div class="{css epg-widget-item}">
+                <div class="{css epg-widget-item-wrapper}">
+                  <div class="{css epg-widget-item-start-time}" data-model="startTime" data-filter="datetime(hh:mm)"></div>
+                  <div class="{css epg-widget-item-name}" data-model="publishName"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {else}
+          <div class="{css playable-list-item-description}">{$description}</div>
+        {/if}
         <div class="{css playable-list-item-details}">
           {if $cost != 0}
             <div class="{css playable-list-item-price}">

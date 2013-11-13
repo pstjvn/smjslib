@@ -98,6 +98,8 @@ _.generateTemplateData = function(control) {
     cost: control.getModel().getProp(smstb.ds.Record.Property.COST),
     currency: control.getModel().getProp(smstb.ds.Record.Property.CURRENCY),
     isdir: control.getModel().getProp(smstb.ds.Record.Property.ISDIR),
+    isiptv: (control.getModel().getProp(
+        smstb.ds.Record.Property.TYPE) == 'iptv'),
     bookmarked: control.getModel().getProp(smstb.ds.Record.Property.BOOKMARKED)
   };
 };
