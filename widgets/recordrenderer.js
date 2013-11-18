@@ -1,6 +1,7 @@
 goog.provide('smstb.widget.RecordRenderer');
 
 goog.require('pstj.ui.TableViewItemRenderer');
+goog.require('smstb.template');
 
 
 

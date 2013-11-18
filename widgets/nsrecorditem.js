@@ -11,6 +11,7 @@ goog.require('goog.dom.classlist');
 goog.require('goog.dom.dataset');
 goog.require('pstj.configure');
 goog.require('pstj.ui.TableViewItem');
+goog.require('pstj.ui.TouchAgent');
 
 
 
@@ -23,8 +24,10 @@ goog.require('pstj.ui.TableViewItem');
  * @constructor
  * @extends {pstj.ui.TableViewItem}
  * @param {pstj.ui.ControlRenderer=} opt_renderer Optional renderer to use.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
+ * document interaction.
  */
-smstb.widget.NSRecordItem = function(opt_renderer) {
+smstb.widget.NSRecordItem = function(opt_renderer, opt_domHelper) {
   goog.base(this, opt_renderer);
   /**
    * @type {Element}
