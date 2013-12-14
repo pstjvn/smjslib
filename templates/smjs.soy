@@ -172,7 +172,9 @@
             </div>
           {/if}
           {if $isdir != true}
-            <div class="{css epg-guide}">{msg desc="Guide"}Guide{/msg}</div>
+            {if $isiptv == true}
+              <div class="{css epg-guide}">{msg desc="Guide"}Guide{/msg}</div>
+            {/if}
           {/if}
         </div>
       </div>
