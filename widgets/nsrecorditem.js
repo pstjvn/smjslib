@@ -39,7 +39,7 @@ smstb.widget.NSRecordItem = function(opt_renderer, opt_domHelper) {
    * @type {string}
    * @private
    */
-  this.imageSource_ = 'none';
+  this.imageSource_ = '';
   /**
    * Flag if we have an image to show, used to skip DOM alterations when not
    * needed.
@@ -47,7 +47,12 @@ smstb.widget.NSRecordItem = function(opt_renderer, opt_domHelper) {
    * @private
    */
   this.hasHiddenImages_ = false;
-
+  /**
+   * Flag if the image is currently visible.
+   * @type {boolean}
+   * @private
+   */
+  this.imageVisible_ = false;
   // Enable hover state only on PC as it has the resources to render that
   // on Mobile this is overhead we want to avoid.
   if (pstj.configure.getRuntimeValue(
@@ -71,6 +76,18 @@ smstb.widget.NSRecordItem.DEFAULT_THUMBNAIL = goog.asserts.assertString(
     'assets/default-thumbnail.svg',
     'SYSMASTER.APPS.MOBILETV').toString());
 
+/**
+ * Reference the default thumbnail for folders.
+ *
+ * @type {string}
+ * @protected
+ */
+smstb.widget.NSRecordItem.DEFAULT_FOLDER_THUMBNAIL = goog.asserts.assertString(
+    pstj.configure.getRuntimeValue('DEFAULT_FOLDER_THUMBNAIL',
+    'assets/default-folder-thumbnail.png',
+    'SYSMASTER.APPS.MOBILETV'));
+
+
 goog.scope(function() {
 
 var _ = smstb.widget.NSRecordItem.prototype;
@@ -79,11 +96,15 @@ var _ = smstb.widget.NSRecordItem.prototype;
 /** @inheritDoc */
 _.setModel = function(model) {
   if (model != this.getModel()) {
-    if (goog.isNull(this.getModel())) {
-      this.hasHiddenImages_ = true;
+    if (goog.isNull(model)) {
+      this.hasHiddenImages_ = false;
+      this.imageTag_.src = '';
       this.setImageVisible(false);
-    } else if (!goog.isNull(model)) {
-      if (model.getProp(this.imageSource_) != this.getModel().getProp(
+    } else {
+      if (goog.isNull(this.getModel())) {
+        this.hasHiddenImages_ = true;
+        this.setImageVisible(false);
+      } else if (this.getModel().getProp(this.imageSource_) != model.getProp(
           this.imageSource_)) {
         this.hasHiddenImages_ = true;
         this.setImageVisible(false);
@@ -102,8 +123,11 @@ _.setModel = function(model) {
  * @param {boolean} visible True if the image should be visible.
  */
 _.setImageVisible = function(visible) {
-  goog.dom.classlist.enable(this.imageTag_, goog.getCssName(
-      'smstb-hidden-image'), !visible);
+  if (this.imageVisible_ != visible) {
+    this.imageVisible_ = visible;
+    goog.dom.classlist.enable(this.imageTag_, goog.getCssName(
+        'smstb-hidden-image'), !visible);
+  }
 };
 
 
@@ -112,17 +136,32 @@ _.setImageVisible = function(visible) {
  * path that has issues on the mobile when rasterzing the images.
  */
 _.showImages = function() {
-  if (!this.hasHiddenImages_) return;
+  if (!this.hasHiddenImages_) {
+    return;
+  }
   this.hasHiddenImages_ = false;
   var url = '';
 
   if (!goog.isNull(this.getModel())) {
     url = this.getModel().getProp(this.imageSource_);
     if (url == '') {
-      url = smstb.widget.NSRecordItem.DEFAULT_THUMBNAIL;
+      if (this.getModel().getProp(smstb.ds.Record.Property.ISDIR)) {
+        url = smstb.widget.NSRecordItem.DEFAULT_FOLDER_THUMBNAIL;
+      } else {
+        url = smstb.widget.NSRecordItem.DEFAULT_THUMBNAIL;
+      }
     }
   }
   this.imageTag_.src = url;
+};
+
+
+/** @inheritDoc */
+_.exitDocument = function() {
+  goog.base(this, 'exitDocument');
+  if (!goog.isNull(this.imageTag_)) {
+    this.imageTag_.onload = null;
+  }
 };
 
 
