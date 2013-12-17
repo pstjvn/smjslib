@@ -173,7 +173,9 @@
           {/if}
           {if $isdir != true}
             {if $isiptv == true}
-              <div class="{css epg-guide}">{msg desc="Guide"}Guide{/msg}</div>
+              <div class="{css epg-guide}">
+                {msg desc="Guide"}Guide{/msg}
+              </div>
             {/if}
           {/if}
         </div>
@@ -194,14 +196,14 @@
           <img src="" data-urlname="thumbnail" alt="channel thumbnail" class="{css poster}">
         </div>
         <div class="{css playable-list-item-title}" data-model="publishName"></div>
-        <div class="{css playable-list-item-description}" data-model="description"></div>
+        <div class="{css playable-list-item-description}"></div>
         <div class="{css playable-list-item-details}">
           <div class="{css playable-list-item-price}" data-model="cost" data-switch data-filter="DisplayIfLargerThanZero">
             <span>{msg desc="Price label"}Price{/msg}:{sp}</span>
             <span data-model="cost"></span>{sp}
             <span data-model="currency"></span>
           </div>
-          <div class="{css epg-guide}" data-model="isDir" data-switch data-filter="ngDisplayIfFalse">
+          <div class="{css epg-guide}">
             {msg desc="Guide"}Guide{/msg}
           </div>
         </div>
