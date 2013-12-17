@@ -57,5 +57,5 @@ goog.addDependency('../../../apps/smjs/widgets/players/tvplayer.js', ['smstb.wid
 goog.addDependency('../../../apps/smjs/widgets/popover.js', ['smstb.widget.PopOver'], ['pstj.ui.PopOverLayer']);
 goog.addDependency('../../../apps/smjs/widgets/popup.js', ['smstb.widget.MobilePopup'], ['goog.dom', 'goog.dom.classlist', 'pstj.ui.Button', 'pstj.ui.Templated', 'pstj.ui.ngAgent']);
 goog.addDependency('../../../apps/smjs/widgets/radioselect.js', ['smstb.widget.RadioSelect'], ['goog.ui.Component', 'goog.ui.Component.EventType', 'goog.ui.ControlRenderer', 'pstj.ui.Button', 'pstj.ui.EmbededButtonRenderer']);
-goog.addDependency('../../../apps/smjs/widgets/recordrenderer.js', ['smstb.widget.RecordRenderer'], ['pstj.ui.TableViewItemRenderer']);
+goog.addDependency('../../../apps/smjs/widgets/recordrenderer.js', ['smstb.widget.RecordRenderer'], ['pstj.ui.TableViewItemRenderer', 'smstb.template']);
 goog.addDependency('../../../apps/smjs/widgets/search-panel.js', ['smstb.widget.SearchPanel'], ['goog.dom.classlist', 'goog.events.EventType', 'goog.string', 'goog.ui.Component', 'goog.ui.Component.EventType', 'goog.ui.Component.State', 'goog.ui.Control', 'pstj.ui.TouchAgent', 'smstb.widget.RadioSelect']);
