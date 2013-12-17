@@ -10,6 +10,7 @@ goog.provide('smstb.widget.NSRecordItem');
 goog.require('goog.dom.classlist');
 goog.require('goog.dom.dataset');
 goog.require('pstj.configure');
+goog.require('pstj.ui.Image');
 goog.require('pstj.ui.TableViewItem');
 goog.require('pstj.ui.TouchAgent');
 
@@ -29,6 +30,7 @@ goog.require('pstj.ui.TouchAgent');
  */
 smstb.widget.NSRecordItem = function(opt_renderer, opt_domHelper) {
   goog.base(this, opt_renderer);
+  this.image_ = new pstj.ui.Image();
   /**
    * @type {Element}
    * @private
@@ -95,22 +97,28 @@ var _ = smstb.widget.NSRecordItem.prototype;
 
 /** @inheritDoc */
 _.setModel = function(model) {
-  if (model != this.getModel()) {
-    if (goog.isNull(model)) {
-      this.hasHiddenImages_ = false;
-      this.imageTag_.src = '';
-      this.setImageVisible(false);
-    } else {
-      if (goog.isNull(this.getModel())) {
-        this.hasHiddenImages_ = true;
-        this.setImageVisible(false);
-      } else if (this.getModel().getProp(this.imageSource_) != model.getProp(
-          this.imageSource_)) {
-        this.hasHiddenImages_ = true;
-        this.setImageVisible(false);
+  goog.base(this, 'setModel', model);
+  this.setThumbnail();
+};
+
+
+/**
+ * Sets the thumbnail of the record.
+ * @protected
+ */
+_.setThumbnail = function() {
+  if (goog.isNull(this.getModel())) {
+    this.image_.setModel('');
+  } else {
+    var src = this.getModel().getProp(smstb.ds.Record.Property.THUMBNAIL);
+    if (src == '') {
+      if (this.getModel().getProp(smstb.ds.Record.Property.ISDIR)) {
+        src = smstb.widget.NSRecordItem.DEFAULT_FOLDER_THUMBNAIL;
+      } else {
+        src = smstb.widget.NSRecordItem.DEFAULT_THUMBNAIL;
       }
     }
-    goog.base(this, 'setModel', model);
+    this.image_.setModel(src);
   }
 };
 
@@ -136,6 +144,7 @@ _.setImageVisible = function(visible) {
  * path that has issues on the mobile when rasterzing the images.
  */
 _.showImages = function() {
+  return;
   if (!this.hasHiddenImages_) {
     return;
   }
@@ -168,15 +177,17 @@ _.exitDocument = function() {
 /** @inheritDoc */
 _.enterDocument = function() {
   goog.base(this, 'enterDocument');
-  this.imageTag_ = this.getElement().querySelector('img');
+  this.addChild(this.image_);
+  this.image_.decorate(this.getElementByClass(goog.getCssName('poster')));
+  //this.imageTag_ = this.getElement().querySelector('img');
 
-  if (!goog.isNull(this.imageTag_)) {
-    this.imageTag_.onload = goog.bind(function() {
-      this.setImageVisible(true);
-    }, this);
-    this.imageSource_ = goog.dom.dataset.get(this.imageTag_, 'urlname') ||
-        'none';
-  }
+  // if (!goog.isNull(this.imageTag_)) {
+  //   this.imageTag_.onload = goog.bind(function() {
+  //     this.setImageVisible(true);
+  //   }, this);
+  //   this.imageSource_ = goog.dom.dataset.get(this.imageTag_, 'urlname') ||
+  //       'none';
+  // }
 
   pstj.ui.TouchAgent.getInstance().attach(this);
 };
