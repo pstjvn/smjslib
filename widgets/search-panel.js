@@ -14,6 +14,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.Control');
+goog.require('pstj.configure');
 goog.require('pstj.ui.TouchAgent');
 goog.require('smstb.widget.RadioSelect');
 
@@ -50,6 +51,9 @@ smstb.widget.SearchPanel = function() {
   this.hide_ = new goog.ui.Control('');
   this.clearLanguage_ = new goog.ui.Control('');
   this.clearCategory_ = new goog.ui.Control('');
+  this.hideAfterTypeChange_ = goog.asserts.assertBoolean(
+      pstj.configure.getRuntimeValue('TYPE_HIDES_FILTER',
+          false, 'SYSMASTER.APPS.MOBILETV'), 'The option should be boolean');
 };
 goog.inherits(smstb.widget.SearchPanel, goog.ui.Component);
 
@@ -97,6 +101,9 @@ smstb.widget.SearchPanel.prototype.enterDocument = function() {
   this.getHandler().listen(this.type_, goog.ui.Component.EventType.ACTION,
       function(e) {
         this.dispatchEvent(goog.ui.Component.EventType.ACTION);
+        if (this.hideAfterTypeChange_) {
+          this.enable(false);
+        }
       });
 
   this.getHandler().listen(this.language_, goog.events.EventType.CHANGE,
