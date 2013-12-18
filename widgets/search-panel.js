@@ -7,8 +7,11 @@
 
 goog.provide('smstb.widget.SearchPanel');
 
+goog.require('goog.async.Delay');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
+goog.require('goog.events.KeyHandler');
+goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Component.EventType');
@@ -51,9 +54,18 @@ smstb.widget.SearchPanel = function() {
   this.hide_ = new goog.ui.Control('');
   this.clearLanguage_ = new goog.ui.Control('');
   this.clearCategory_ = new goog.ui.Control('');
+  this.keyHandler_ = new goog.events.KeyHandler();
+  this.inputHideDelay_ = new goog.async.Delay(function() {
+    this.dispatchEvent(goog.ui.Component.EventType.ACTION);
+    this.input_.blur();
+    this.enable(false);
+  }, 1800, this);
   this.hideAfterTypeChange_ = goog.asserts.assertBoolean(
       pstj.configure.getRuntimeValue('TYPE_HIDES_FILTER',
           false, 'SYSMASTER.APPS.MOBILETV'), 'The option should be boolean');
+  this.hideAfterInput_ = goog.asserts.assertBoolean(
+      pstj.configure.getRuntimeValue('INPUT_HIDES_FILTERS',
+          false, 'SYSMASTER.APPS.MOBILETV'));
 };
 goog.inherits(smstb.widget.SearchPanel, goog.ui.Component);
 
@@ -63,6 +75,9 @@ smstb.widget.SearchPanel.prototype.decorateInternal = function(el) {
   goog.base(this, 'decorateInternal', el);
 
   this.input_ = this.getElementByClass(goog.getCssName('searchfield'));
+  if (this.hideAfterInput_) {
+    this.keyHandler_.attach(this.input_);
+  }
 
   this.type_.decorate(this.getElementByClass(goog.getCssName(
       'type-selection')));
@@ -88,6 +103,16 @@ smstb.widget.SearchPanel.prototype.decorateInternal = function(el) {
 };
 
 
+/**
+ * Handles the keyboard when the focus is in the search input.
+ * @param {goog.events.Event} e The wrapped key event.
+ * @private
+ */
+smstb.widget.SearchPanel.prototype.handleKeyInInput_ = function(e) {
+  this.inputHideDelay_.start();
+};
+
+
 /** @inheritDoc */
 smstb.widget.SearchPanel.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
@@ -97,6 +122,17 @@ smstb.widget.SearchPanel.prototype.enterDocument = function() {
         this.input_.blur();
         this.dispatchEvent(goog.ui.Component.EventType.ACTION);
       });
+
+  if (this.hideAfterInput_) {
+
+    this.getHandler().listen(this.input_, goog.events.EventType.BLUR,
+        function(e) {
+          this.inputHideDelay_.stop();
+        });
+
+    this.getHandler().listen(this.keyHandler_,
+        goog.events.KeyHandler.EventType.KEY, this.handleKeyInInput_);
+  }
 
   this.getHandler().listen(this.type_, goog.ui.Component.EventType.ACTION,
       function(e) {
