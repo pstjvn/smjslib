@@ -1,6 +1,9 @@
 /**
  * @fileoverview Provides tweaked implementation for the record item view that
  * handles the images differently to allow for smoother animation.
+ * The widget itself is a composite component that utilizes both the image
+ * component and the NG agent to display its content.
+ * TODO: add the EPG preview widget as well.
  *
  * @author regardingscot@gmail.com (PeterStJ)
  */
@@ -30,31 +33,14 @@ goog.require('pstj.ui.TouchAgent');
  */
 smstb.widget.NSRecordItem = function(opt_renderer, opt_domHelper) {
   goog.base(this, opt_renderer);
+  /**
+   * Reference to the image component. It is used internally to represen the
+   * thumbnail of the record.
+   * @type {pstj.ui.Image}
+   * @private
+   */
   this.image_ = new pstj.ui.Image();
-  /**
-   * @type {Element}
-   * @private
-   */
-  this.imageTag_ = null;
-  /**
-   * The source name (i.e. model attribute) of the image.
-   * @type {string}
-   * @private
-   */
-  this.imageSource_ = '';
-  /**
-   * Flag if we have an image to show, used to skip DOM alterations when not
-   * needed.
-   * @type {boolean}
-   * @private
-   */
-  this.hasHiddenImages_ = false;
-  /**
-   * Flag if the image is currently visible.
-   * @type {boolean}
-   * @private
-   */
-  this.imageVisible_ = false;
+  this.registerDisposable(this.image_);
   // Enable hover state only on PC as it has the resources to render that
   // on Mobile this is overhead we want to avoid.
   if (pstj.configure.getRuntimeValue(
@@ -77,6 +63,7 @@ smstb.widget.NSRecordItem.DEFAULT_THUMBNAIL = goog.asserts.assertString(
     pstj.configure.getRuntimeValue('DEFAULT_THUMBNAIL',
     'assets/default-thumbnail.svg',
     'SYSMASTER.APPS.MOBILETV').toString());
+
 
 /**
  * Reference the default thumbnail for folders.
@@ -124,54 +111,10 @@ _.setThumbnail = function() {
 
 
 /**
- * Sets the visiblity state of the image. Basically we want to hide the old
- * image before we actually change the image itself in order to impove
- * rendering performance.
- * @protected
- * @param {boolean} visible True if the image should be visible.
- */
-_.setImageVisible = function(visible) {
-  if (this.imageVisible_ != visible) {
-    this.imageVisible_ = visible;
-    goog.dom.classlist.enable(this.imageTag_, goog.getCssName(
-        'smstb-hidden-image'), !visible);
-  }
-};
-
-
-/**
  * Shows the image currently set in the model. This is to divert the rendering
  * path that has issues on the mobile when rasterzing the images.
  */
-_.showImages = function() {
-  return;
-  if (!this.hasHiddenImages_) {
-    return;
-  }
-  this.hasHiddenImages_ = false;
-  var url = '';
-
-  if (!goog.isNull(this.getModel())) {
-    url = this.getModel().getProp(this.imageSource_);
-    if (url == '') {
-      if (this.getModel().getProp(smstb.ds.Record.Property.ISDIR)) {
-        url = smstb.widget.NSRecordItem.DEFAULT_FOLDER_THUMBNAIL;
-      } else {
-        url = smstb.widget.NSRecordItem.DEFAULT_THUMBNAIL;
-      }
-    }
-  }
-  this.imageTag_.src = url;
-};
-
-
-/** @inheritDoc */
-_.exitDocument = function() {
-  goog.base(this, 'exitDocument');
-  if (!goog.isNull(this.imageTag_)) {
-    this.imageTag_.onload = null;
-  }
-};
+_.showImages = function() {};
 
 
 /** @inheritDoc */
@@ -179,16 +122,6 @@ _.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.addChild(this.image_);
   this.image_.decorate(this.getElementByClass(goog.getCssName('poster')));
-  //this.imageTag_ = this.getElement().querySelector('img');
-
-  // if (!goog.isNull(this.imageTag_)) {
-  //   this.imageTag_.onload = goog.bind(function() {
-  //     this.setImageVisible(true);
-  //   }, this);
-  //   this.imageSource_ = goog.dom.dataset.get(this.imageTag_, 'urlname') ||
-  //       'none';
-  // }
-
   pstj.ui.TouchAgent.getInstance().attach(this);
 };
 
