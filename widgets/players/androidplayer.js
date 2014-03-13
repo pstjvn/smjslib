@@ -2,6 +2,7 @@ goog.provide('smstb.widget.AndroidPlayer');
 
 goog.require('goog.string');
 goog.require('goog.ui.Component');
+goog.require('pstj.configure');
 
 
 
@@ -17,7 +18,12 @@ goog.inherits(smstb.widget.AndroidPlayer, goog.ui.Component);
 
 /** @inheritDoc */
 smstb.widget.AndroidPlayer.prototype.setModel = function(url) {
-  window.open(smstb.widget.AndroidPlayer.PREFIX + goog.string.urlEncode(url));
+  if (pstj.configure.getRuntimeValue(
+      'EMBED', 0, 'SYSMASTER.APPS.MOBILETV') == 1) {
+    window.open(url + '&embed=1');
+  } else {
+    window.open(smstb.widget.AndroidPlayer.PREFIX + goog.string.urlEncode(url));
+  }
 };
 
 
