@@ -96,7 +96,7 @@ smstb.widget.Notification.prototype.enable = function(enable) {
     pstj.ui.ngAgent.getInstance().apply(this);
   }
   this.enabled_ = enable;
-  goog.dom.classes.enable(this.getElement(), goog.getCssName('active'), enable);
+  goog.dom.classlist.enable(this.getElement(), goog.getCssName('active'), enable);
   this.enableHideDelay(enable);
 };
 
