@@ -207,8 +207,8 @@ smstb.widget.ListItem.prototype.enterDocument = function() {
         'The model should be a ListItem instance'),
         pstj.ds.ListItem.EventType.UPDATE,
         this.handleModelUpdate);
-    this.setBookmarked(this.getModel().getProp(
-        smstb.ds.Record.Property.BOOKMARKED), true);
+    this.setBookmarked(goog.asserts.assertBoolean(this.getModel().getProp(
+        smstb.ds.Record.Property.BOOKMARKED)), true);
   }
 };
 
@@ -226,6 +226,16 @@ smstb.widget.ListItem.prototype.setState = function(state, enable) {
     }
   }
   goog.base(this, 'setState', state, enable);
+};
+
+
+/**
+ * @override
+ * @return {pstj.ds.ListItem}
+ */
+smstb.widget.ListItem.prototype.getModel = function() {
+  return goog.asserts.assertInstanceof(goog.base(this, 'getModel'),
+      pstj.ds.ListItem);
 };
 
 
