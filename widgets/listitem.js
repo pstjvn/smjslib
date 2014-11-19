@@ -114,7 +114,7 @@ _.getCssClass = function() {
 /** @inheritDoc */
 _.createDom = function(control) {
   return /** @type {Element} */ (goog.dom.htmlToDocumentFragment(
-      this.getTemplate(control)));
+      this.getTemplate(control).toString()));
 };
 
 
@@ -207,8 +207,10 @@ smstb.widget.ListItem.prototype.enterDocument = function() {
         'The model should be a ListItem instance'),
         pstj.ds.ListItem.EventType.UPDATE,
         this.handleModelUpdate);
-    this.setBookmarked(this.getModel().getProp(
-        smstb.ds.Record.Property.BOOKMARKED), true);
+    this.setBookmarked(
+        goog.asserts.assertBoolean(
+            this.getModel().getProp(smstb.ds.Record.Property.BOOKMARKED)),
+        true);
   }
 };
 
@@ -313,4 +315,18 @@ smstb.widget.ListItem.prototype.setBookmarked = function(
 smstb.widget.ListItem.prototype.handleModelUpdate = function() {
   this.setBookmarked(!!this.getModel().getProp(
       smstb.ds.Record.Property.BOOKMARKED));
+};
+
+
+/**
+ * @override
+ * @return {pstj.ds.ListItem}
+ */
+smstb.widget.ListItem.prototype.getModel = function() {
+  var model = goog.base(this, 'getModel');
+  if (!goog.isNull(model)) {
+    return goog.asserts.assertInstanceof(model, pstj.ds.ListItem);
+  } else {
+    return null;
+  }
 };
