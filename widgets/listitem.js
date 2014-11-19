@@ -232,6 +232,16 @@ smstb.widget.ListItem.prototype.setState = function(state, enable) {
 
 
 /**
+ * @override
+ * @return {pstj.ds.ListItem}
+ */
+smstb.widget.ListItem.prototype.getModel = function() {
+  return goog.asserts.assertInstanceof(goog.base(this, 'getModel'),
+      pstj.ds.ListItem);
+};
+
+
+/**
  * Called when the item is first activated.
  * @protected
  * @param {boolean} enable If the delay should be enabled or disabled.
