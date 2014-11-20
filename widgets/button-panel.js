@@ -92,11 +92,22 @@ smstb.widget.ButtonPanel.prototype.postHandler = function() {
 smstb.widget.ButtonPanel.prototype.preHandler = function(e) {
   e.stopPropagation();
   e.preventDefault();
-  if (goog.dom.dataset.has(/** @type {Element} */ (e.target), 'action')) {
+  var el = /** @type {Element} */ (e.target);
+
+  if (el != this.getElement()) {
+    while (el != this.getElement()) {
+      if (goog.dom.dataset.has(el, 'action')) {
+        break;
+      }
+      el = goog.dom.getParentElement(el);
+    }
+  }
+
+  if (goog.dom.dataset.has(/** @type {Element} */ (el), 'action')) {
     if (!goog.isNull(this.current_)) {
       goog.dom.classlist.remove(this.current_, goog.getCssName('active'));
     }
-    this.current_ = goog.asserts.assertInstanceof(e.target, Element);
+    this.current_ = goog.asserts.assertInstanceof(el, Element);
     goog.dom.classlist.add(e.target, goog.getCssName('active'));
     this.dispatchEvent(goog.ui.Component.EventType.ACTION);
     this.delay_.start();
