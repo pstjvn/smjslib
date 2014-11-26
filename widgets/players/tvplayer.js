@@ -22,13 +22,22 @@ goog.require('smstb.widget.TagPlayer');
 smstb.widget.TVPlayer = function() {
   goog.base(this, '', goog.ui.ControlRenderer.getCustomRenderer(
       goog.ui.ControlRenderer, goog.getCssName('right')));
+
   this.setHandleMouseEvents(false);
   this.setAutoStates(goog.ui.Component.State.ALL, false);
+
   this.backButton = new pstj.ui.Button(
       /** @type {pstj.ui.CustomButtonRenderer} */ (
       goog.ui.ControlRenderer.getCustomRenderer(
       pstj.ui.CustomButtonRenderer, goog.getCssName('backbutton'))));
+
   this.player_ = null;
+  /**
+   * Flag, if the player should try to use casting.
+   * @type {boolean}
+   * @private
+   */
+  this.useCast_ = false;
 };
 goog.inherits(smstb.widget.TVPlayer, goog.ui.Control);
 
@@ -41,13 +50,75 @@ goog.inherits(smstb.widget.TVPlayer, goog.ui.Control);
 smstb.widget.TVPlayer.PLAY_TYPE = '&t=1';
 
 
+/**
+ * Enables the casting. This means that the user has pressed the cast
+ * icon and as a result we should initiate session and if there is already
+ * media selected previously start playing it. If there has been no media
+ * previously we should just create the session.
+ * @param {boolean} enable If we should start a session or stop it.
+ */
+smstb.widget.TVPlayer.prototype.enableCasting = function(enable) {
+  if (this.useCast_ != enable) {
+    // In this app it is safe to assume that there is no session when we
+    // receive this call. We also want to start playing right away and do not
+    // stop (but change media) until the session is stopped
+    if (enable) {
+      // create the session
+      pstj.cast.Cast.getInstance().createSession();
+      this.getHandler().listen(
+          pstj.cast.Cast.getInstance(),
+          pstj.cast.Cast.EventType.READY,
+          this.onCastReady);
+    } else {
+      pstj.cast.Cast.getInstance().destroySession();
+      this.getHandler().unlisten(
+          pstj.cast.Cast.getInstance(),
+          pstj.cast.Cast.EventType.READY,
+          this.onCastReady);
+    }
+    this.useCast_ = enable;
+  }
+};
+
+
+/**
+ * Handles the cast ready, also used to start new media.
+ * @param {goog.events.Event} e
+ * @protected
+ */
+smstb.widget.TVPlayer.prototype.onCastReady = function(e) {
+  if (this.useCast_) {
+    if (!goog.isNull(this.getModel())) {
+      pstj.cast.Cast.getInstance().castUrl(
+          this.getCastUrl(
+              this.getModel().getProp(smstb.ds.Record.Property.PLAYURL)));
+    }
+  }
+};
+
+
+/**
+ * Make the stream suitable for the cast player.
+ * @param {string} url
+ * @return {string}
+ * @protected
+ */
+smstb.widget.TVPlayer.prototype.getCastUrl = function(url) {
+  return url + '&cast=1';
+};
+
+
 /** @inheritDoc */
 smstb.widget.TVPlayer.prototype.decorateInternal = function(el) {
   goog.base(this, 'decorateInternal', el);
   try {
     this.player_ = this.createPlayer();
   } catch (e) {
-    alert('You seem to be blocking Flash, please enable it and try again');
+    if (goog.DEBUG) {
+      console.log('Flash seems to be blocked?');
+    } else {
+      alert('You seem to be blocking Flash, please enable it and try again');
+    }
     return;
   }
   this.backButton.decorate(this.getElementByClass(
@@ -71,14 +142,18 @@ smstb.widget.TVPlayer.prototype.enterDocument = function() {
 
 /** @inheritDoc */
 smstb.widget.TVPlayer.prototype.setModel = function(model) {
-  goog.asserts.assertInstanceof(model, pstj.ds.ListItem,
-      'The model should be list item instance');
+  goog.asserts.assertInstanceof(model, pstj.ds.ListItem);
   goog.base(this, 'setModel', model);
   pstj.ui.ngAgent.getInstance().apply(this);
-  this.player_.setModel(this.getModel().getProp(
-      smstb.ds.Record.Property.PLAYURL) +
-      smstb.widget.TVPlayer.PLAY_TYPE);
-  this.setActive(true);
+  console.log('Using cast?');
+  if (this.useCast_) {
+    this.onCastReady(null);
+  } else {
+    this.player_.setModel(this.getModel().getProp(
+        smstb.ds.Record.Property.PLAYURL) +
+        smstb.widget.TVPlayer.PLAY_TYPE);
+    this.setActive(true);
+  }
 };
 
 
