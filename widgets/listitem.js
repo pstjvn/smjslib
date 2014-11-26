@@ -236,8 +236,12 @@ smstb.widget.ListItem.prototype.setState = function(state, enable) {
  * @return {pstj.ds.ListItem}
  */
 smstb.widget.ListItem.prototype.getModel = function() {
-  return goog.asserts.assertInstanceof(goog.base(this, 'getModel'),
-      pstj.ds.ListItem);
+  var model = goog.base(this, 'getModel');
+  if (!goog.isNull(model)) {
+    return goog.asserts.assertInstanceof(model, pstj.ds.ListItem);
+  } else {
+    return null;
+  }
 };
 
 
@@ -325,18 +329,4 @@ smstb.widget.ListItem.prototype.setBookmarked = function(
 smstb.widget.ListItem.prototype.handleModelUpdate = function() {
   this.setBookmarked(!!this.getModel().getProp(
       smstb.ds.Record.Property.BOOKMARKED));
-};
-
-
-/**
- * @override
- * @return {pstj.ds.ListItem}
- */
-smstb.widget.ListItem.prototype.getModel = function() {
-  var model = goog.base(this, 'getModel');
-  if (!goog.isNull(model)) {
-    return goog.asserts.assertInstanceof(model, pstj.ds.ListItem);
-  } else {
-    return null;
-  }
 };

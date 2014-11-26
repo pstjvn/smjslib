@@ -108,7 +108,9 @@ smstb.widget.ButtonPanel.prototype.preHandler = function(e) {
       goog.dom.classlist.remove(this.current_, goog.getCssName('active'));
     }
     this.current_ = goog.asserts.assertInstanceof(el, Element);
-    goog.dom.classlist.add(e.target, goog.getCssName('active'));
+    goog.dom.classlist.add(
+        goog.asserts.assertInstanceof(e.target, Element),
+        goog.getCssName('active'));
     this.dispatchEvent(goog.ui.Component.EventType.ACTION);
     this.delay_.start();
   }
