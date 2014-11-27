@@ -90,21 +90,9 @@ smstb.widget.TVPlayer.prototype.onCastReady = function(e) {
   if (this.useCast_) {
     if (!goog.isNull(this.getModel())) {
       pstj.cast.Cast.getInstance().castUrl(
-          this.getCastUrl(
-              this.getModel().getProp(smstb.ds.Record.Property.PLAYURL)));
+          this.getModel().getProp(smstb.ds.Record.Property.CASTURL));
     }
   }
-};
-
-
-/**
- * Make the stream suitable for the cast player.
- * @param {string} url
- * @return {string}
- * @protected
- */
-smstb.widget.TVPlayer.prototype.getCastUrl = function(url) {
-  return url + '&cast=1';
 };
 
 
@@ -149,9 +137,11 @@ smstb.widget.TVPlayer.prototype.setModel = function(model) {
   if (this.useCast_) {
     this.onCastReady(null);
   } else {
-    this.player_.setModel(this.getModel().getProp(
-        smstb.ds.Record.Property.PLAYURL) +
+
+    this.player_.setModel(
+        this.getModel().getProp(smstb.ds.Record.Property.PLAYURL) +
         smstb.widget.TVPlayer.PLAY_TYPE);
+
     this.setActive(true);
   }
 };

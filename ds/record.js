@@ -32,6 +32,7 @@ smstb.ds.Record.Property = {
   LANGUAGE: 'language',
   CANRECORD: 'personalRecordingOptions.canRecord',
   PLAYURL: 'playURI',
+  CASTURL: 'castURI',
   NAME: 'publishName',
   RATING: 'rating',
   SORTINDEX: 'sortIndex',
