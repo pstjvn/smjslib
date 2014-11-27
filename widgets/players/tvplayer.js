@@ -90,7 +90,8 @@ smstb.widget.TVPlayer.prototype.onCastReady = function(e) {
   if (this.useCast_) {
     if (!goog.isNull(this.getModel())) {
       pstj.cast.Cast.getInstance().castUrl(
-          this.getModel().getProp(smstb.ds.Record.Property.CASTURL));
+          this.getModel().getProp(smstb.ds.Record.Property.CASTURL),
+          this.getModel().getProp(smstb.ds.Record.Property.NAME));
     }
   }
 };
