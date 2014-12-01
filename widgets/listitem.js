@@ -219,7 +219,8 @@ smstb.widget.ListItem.prototype.enterDocument = function() {
  * Allows us to catch long presses.
  * @override
  */
-smstb.widget.ListItem.prototype.setState = function(state, enable) {
+smstb.widget.ListItem.prototype.setState = function(
+    state, enable, opt_calledFrom) {
   if (state == goog.ui.Component.State.ACTIVE) {
     if (!this.isActive() && enable) {
       this.enableLongPressDelay(true);
@@ -227,7 +228,7 @@ smstb.widget.ListItem.prototype.setState = function(state, enable) {
       this.enableLongPressDelay(false);
     }
   }
-  goog.base(this, 'setState', state, enable);
+  goog.base(this, 'setState', state, enable, opt_calledFrom);
 };
 
 
