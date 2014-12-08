@@ -28,11 +28,9 @@ smstb.widget.AndroidPlayer.prototype.setModel = function(url) {
 
 
 /**
- * The android intent URL (prefix) that should be used to trigger the intent for
- * playback on the Android's default browser. Note that intent is not detected
- * by firefox in this case!
- * @type {string}
- * @final
+ * @define {string} The android intent URL (prefix) that should be used to
+ * trigger the intent for playback on the Android's default browser.
+ * Note that intent is not detected by firefox in this case!
  */
-smstb.widget.AndroidPlayer.PREFIX =
-    'longa://longa.com/webapp/android/longaapp.html?url=';
+goog.define('smstb.widget.AndroidPlayer.PREFIX',
+    'longa://longa.com/webapp/android/longaapp.html?url=');
