@@ -1,0 +1,10 @@
+include ../pstj/Makefile.include
+
+public_source_dirs := \
+ds \
+persistence \
+player \
+remotecontrol \
+transport \
+tv \
+widgets
