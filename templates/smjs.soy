@@ -240,3 +240,29 @@
   </div>
 {/template}
 
+
+/** Provides the login table template */
+{template .LoginForm}
+  {@param pin: string}
+  {@param domain: string}
+  <div class="{css login-form}">
+    <div class="{css login-table}">
+      <div class="{css login-table-cell}">
+        <div class="{css login}">
+            <div class="{css input-box}">
+              <label for="text">PIN</label>
+              <input type="text" name="pin" id="pin" value="{$pin}" />
+            </div>
+            <div class="{css input-box}">
+              <label for="text">IP</label>
+              <input type="text" name="domain" id="domain" value="{$domain}" />
+            </div>
+            <div id="submit" name="submit" tabindex="0">Login</div>
+        </div>
+      </div>
+    </div>
+    <div class="notifications">
+      <div class="notification-content" data-model="text" data-usehtml="true"></div>
+    </div>
+  </div>
+{/template}

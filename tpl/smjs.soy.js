@@ -9,6 +9,7 @@ goog.provide('smstb.template');
 
 goog.require('soy');
 goog.require('soydata');
+goog.require('goog.asserts');
 
 
 /**
@@ -190,4 +191,25 @@ smstb.template.epgitem = function(opt_data, opt_ignored) {
 };
 if (goog.DEBUG) {
   smstb.template.epgitem.soyTemplateName = 'smstb.template.epgitem';
+}
+
+
+/**
+ * @param {{
+ *    pin: string,
+ *    domain: string
+ * }} opt_data
+ * @param {(null|undefined)=} opt_ignored
+ * @return {!soydata.SanitizedHtml}
+ * @suppress {checkTypes}
+ */
+smstb.template.LoginForm = function(opt_data, opt_ignored) {
+  goog.asserts.assert(goog.isString(opt_data.pin) || (opt_data.pin instanceof goog.soy.data.SanitizedContent), "expected param 'pin' of type string|goog.soy.data.SanitizedContent.");
+  var pin = /** @type {string|goog.soy.data.SanitizedContent} */ (opt_data.pin);
+  goog.asserts.assert(goog.isString(opt_data.domain) || (opt_data.domain instanceof goog.soy.data.SanitizedContent), "expected param 'domain' of type string|goog.soy.data.SanitizedContent.");
+  var domain = /** @type {string|goog.soy.data.SanitizedContent} */ (opt_data.domain);
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="' + goog.getCssName('login-form') + '"><div class="' + goog.getCssName('login-table') + '"><div class="' + goog.getCssName('login-table-cell') + '"><div class="' + goog.getCssName('login') + '"><div class="' + goog.getCssName('input-box') + '"><label for="text">PIN</label><input type="text" name="pin" id="pin" value="' + soy.$$escapeHtmlAttribute(pin) + '" /></div><div class="' + goog.getCssName('input-box') + '"><label for="text">IP</label><input type="text" name="domain" id="domain" value="' + soy.$$escapeHtmlAttribute(domain) + '" /></div><div id="submit" name="submit" tabindex="0">Login</div></div></div></div><div class="notifications"><div class="notification-content" data-model="text" data-usehtml="true"></div></div></div>');
+};
+if (goog.DEBUG) {
+  smstb.template.LoginForm.soyTemplateName = 'smstb.template.LoginForm';
 }
