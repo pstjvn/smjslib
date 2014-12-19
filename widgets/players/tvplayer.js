@@ -51,33 +51,12 @@ smstb.widget.TVPlayer.PLAY_TYPE = '&t=1';
 
 
 /**
- * Enables the casting. This means that the user has pressed the cast
- * icon and as a result we should initiate session and if there is already
- * media selected previously start playing it. If there has been no media
- * previously we should just create the session.
- * @param {boolean} enable If we should start a session or stop it.
+ * Sets the state of casting.
+ * @param {boolean} enable True will trigged casting of all selections.
  */
-smstb.widget.TVPlayer.prototype.enableCasting = function(enable) {
-  if (this.useCast_ != enable) {
-    // In this app it is safe to assume that there is no session when we
-    // receive this call. We also want to start playing right away and do not
-    // stop (but change media) until the session is stopped
-    if (enable) {
-      // create the session
-      pstj.cast.Cast.getInstance().createSession();
-      this.getHandler().listen(
-          pstj.cast.Cast.getInstance(),
-          pstj.cast.Cast.EventType.READY,
-          this.onCastReady);
-    } else {
-      pstj.cast.Cast.getInstance().destroySession();
-      this.getHandler().unlisten(
-          pstj.cast.Cast.getInstance(),
-          pstj.cast.Cast.EventType.READY,
-          this.onCastReady);
-    }
-    this.useCast_ = enable;
-  }
+smstb.widget.TVPlayer.prototype.setCastEnabled = function(enable) {
+  this.useCast_ = enable;
+  this.onCastReady(null);
 };
 
 
