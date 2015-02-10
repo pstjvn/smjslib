@@ -4,6 +4,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.storage.mechanism.mechanismfactory');
 goog.require('goog.ui.registry');
 goog.require('mobiletv.Notification');
+goog.require('pstj.configure');
 goog.require('pstj.material.Element');
 goog.require('pstj.material.ElementRenderer');
 goog.require('smstb.template');
@@ -52,15 +53,17 @@ smstb.widget.LoginForm = goog.defineClass(E, {
      */
     this.pin = this.storage.get(smstb.widget.LoginForm.Name.PIN) || '';
     /**
-     * The domain to talk to.
-     * @type {string}
-     */
-    this.domain = this.storage.get(smstb.widget.LoginForm.Name.DOMAIN) || '';
-    /**
      * Callback function to execute when the authorization is complete.
      * @type {Function}
      */
     this.callback = null;
+    /**
+     * Flag: if on successful login we should store the pin for subsequent
+     * automatic login attempts.
+     * @type {boolean}
+     * @private
+     */
+    this.rememberMe_ = false;
   },
 
 
@@ -123,12 +126,11 @@ smstb.widget.LoginForm = goog.defineClass(E, {
    * @protected
    */
   makeAuthRequest: function() {
-    var uri = new goog.Uri();
-    uri.setScheme('http');
-    uri.setDomain(this.domain);
-    uri.setPath('/cgi-bin/if.cgi');
+    var uri = new goog.Uri(pstj.configure.getRuntimeValue(
+        'LOGIN_URL', '/cgi-bin/if.cgi?run=mtvlog', 'SYSMASTER.APPS.MOBILETV'));
     uri.setParameterValues('pin', this.pin);
-    uri.setParameterValues('run', 'mtvlog');
+
+    if (goog.DEBUG) alert(uri.toString());
 
     var jsonp = new goog.net.Jsonp(uri);
     jsonp.setRequestTimeout(2000);
@@ -144,18 +146,18 @@ smstb.widget.LoginForm = goog.defineClass(E, {
    * @protected
    */
   onSuccess: function(data) {
-    console.log('Data?', data);
     if (data && data['status'] && data['status'] == 'OK') {
-      this.storage.set(smstb.widget.LoginForm.Name.PIN, this.pin);
-      this.storage.set(smstb.widget.LoginForm.Name.DOMAIN, this.domain);
+      if (this.rememberMe_) {
+        this.storage.set(smstb.widget.LoginForm.Name.PIN, this.pin);
+      }
+      // this.storage.set(smstb.widget.LoginForm.Name.DOMAIN, this.domain);
       this.hideForm();
       this.callback();
     } else {
       if (data && data['msg']) {
         this.handleError(data['msg']);
       } else {
-        this.handleError('Cannot authorize with this server: ' +
-            this.domain +
+        this.handleError('Cannot authorize with this server' +
             '. Make sure the domain/ip and pin are correct.');
       }
     }
@@ -167,8 +169,17 @@ smstb.widget.LoginForm = goog.defineClass(E, {
    * @protected
    */
   onError: function() {
-    this.handleError('Cannot connect to destination: ' + this.domain +
+    this.handleError('Cannot connect to destination server' +
         '. Make sure you have entered it correctly and try again');
+  },
+
+
+  /**
+   * Check if the user want to be remembered for next logins.
+   * @private
+   */
+  checkRememberMe_: function() {
+    this.rememberMe_ = this.getRenderer().isRememberMeSet(this.getElement());
   },
 
 
@@ -204,14 +215,18 @@ smstb.widget.LoginForm = goog.defineClass(E, {
         goog.events.EventType.CLICK, this.handleFormSubmit);
   },
 
+
+  /**
+   * Handles the sumition of the form for login in.
+   * @protected
+   */
   handleFormSubmit: function() {
     this.pin = this.getRenderer().getPin(this);
-    this.domain = this.getRenderer().getDomain(this);
-    console.log(this.pin, this.domain);
     if (this.hasCredentials()) {
+      this.checkRememberMe_();
       this.makeAuthRequest();
     } else {
-      this.handleError('Pin or domain missing');
+      this.handleError('Pin missing');
     }
   },
 
@@ -232,7 +247,6 @@ smstb.widget.LoginForm = goog.defineClass(E, {
    */
   updateForm: function() {
     this.getRenderer().setPin(this);
-    this.getRenderer().setDomain(this);
   },
 
 
@@ -241,7 +255,7 @@ smstb.widget.LoginForm = goog.defineClass(E, {
    * @return {boolean}
    */
   hasCredentials: function() {
-    return (this.pin != '' && this.domain != '');
+    return (this.pin != '');
   },
 
 
@@ -292,32 +306,24 @@ smstb.widget.LoginFormRenderer = goog.defineClass(ER, {
 
 
   /**
-   * Updates the DOMAIN entry in the DOM.
-   * @param {smstb.widget.LoginForm} c
-   */
-  setDomain: function(c) {
-    goog.asserts.assertInstanceof(c, smstb.widget.LoginForm);
-    c.querySelector('[name="domain"]').value = c.domain;
-  },
-
-
-  /**
-   * Retrieves the domain value from the dom.
-   * @param {smstb.widget.LoginForm} c
-   * @return {string}
-   */
-  getDomain: function(c) {
-    return c.querySelector('[name="domain"]').value;
-  },
-
-
-  /**
    * Retrieves the submit button.
    * @param {smstb.widget.LoginForm} c
    * @return {Element}
    */
   getSubmitElement: function(c) {
     return c.querySelector('[name="submit"]');
+  },
+
+  /**
+   * Check if the 'remember me' checkbox is activated/ the user want to
+   * preserve the login info for next iterations.
+   * @param {Element} element The element containing the control.
+   * @return {boolean}
+   */
+  isRememberMeSet: function(element) {
+    // TODO: lookup the checkbox and check its value - once the template is
+    // ready
+    return true;
   },
 
 
@@ -330,8 +336,7 @@ smstb.widget.LoginFormRenderer = goog.defineClass(ER, {
   /** @inheritDoc */
   generateTemplateData: function(control) {
     return {
-      pin: control.pin,
-      domain: control.domain
+      pin: control.pin
     };
   },
 
