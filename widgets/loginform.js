@@ -129,9 +129,6 @@ smstb.widget.LoginForm = goog.defineClass(E, {
     var uri = new goog.Uri(pstj.configure.getRuntimeValue(
         'LOGIN_URL', '/cgi-bin/if.cgi?run=mtvlog', 'SYSMASTER.APPS.MOBILETV'));
     uri.setParameterValues('pin', this.pin);
-
-    if (goog.DEBUG) alert(uri.toString());
-
     var jsonp = new goog.net.Jsonp(uri);
     jsonp.setRequestTimeout(2000);
     jsonp.send(null,
@@ -321,9 +318,7 @@ smstb.widget.LoginFormRenderer = goog.defineClass(ER, {
    * @return {boolean}
    */
   isRememberMeSet: function(element) {
-    // TODO: lookup the checkbox and check its value - once the template is
-    // ready
-    return true;
+    return element.querySelector('#rememberme').checked;
   },
 
 
