@@ -20,9 +20,11 @@ goog.inherits(smstb.widget.AndroidPlayer, goog.ui.Component);
 smstb.widget.AndroidPlayer.prototype.setModel = function(url) {
   if (pstj.configure.getRuntimeValue(
       'EMBED', 0, 'SYSMASTER.APPS.MOBILETV') == 1) {
-    window.open(url + '&embed=1');
+    window.open(url + '&embed=1',
+        (!!goog.global['cordova']) ? '_system' : undefined);
   } else {
-    window.open(smstb.widget.AndroidPlayer.PREFIX + goog.string.urlEncode(url));
+    window.open(smstb.widget.AndroidPlayer.PREFIX + goog.string.urlEncode(url),
+        (!!goog.global['cordova']) ? '_system' : undefined);
   }
 };
 
@@ -33,4 +35,4 @@ smstb.widget.AndroidPlayer.prototype.setModel = function(url) {
  * Note that intent is not detected by firefox in this case!
  */
 goog.define('smstb.widget.AndroidPlayer.PREFIX',
-    'longa://longa.com/webapp/android/longaapp.html?url=');
+    'smiptv://sysmaster.com/webapp/android/iptvapp.html?url=');
