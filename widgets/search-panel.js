@@ -128,6 +128,13 @@ smstb.widget.SearchPanel.prototype.enterDocument = function() {
         this.dispatchEvent(goog.ui.Component.EventType.ACTION);
       });
 
+  if (!!goog.global['cordova']) {
+    this.getHandler().listen(this.input_, goog.events.EventType.TOUCHSTART,
+        function(e) {
+          this.input_.focus();
+        });
+  }
+
   if (this.hideAfterInput_) {
 
     this.getHandler().listen(this.input_, goog.events.EventType.BLUR,
