@@ -1,6 +1,8 @@
 goog.provide('smstb.widget.LoginForm');
 
+goog.require('goog.Uri');
 goog.require('goog.events.EventType');
+goog.require('goog.net.Jsonp');
 goog.require('goog.storage.mechanism.mechanismfactory');
 goog.require('goog.ui.registry');
 goog.require('mobiletv.Notification');
