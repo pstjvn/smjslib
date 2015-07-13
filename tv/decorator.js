@@ -60,6 +60,7 @@ _.register = function(classname, constr) {
  *   checked for automatic decoration.
  * @param  {string=} opt_deco_cssclass Optional css class name to use to
  *   match elements that want to be decorated (only for children elements).
+ * @return {!smstb.tv.Component}
  */
 _.decorate = function(baseElement, opt_recursive, opt_deco_cssclass) {
 

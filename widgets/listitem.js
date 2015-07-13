@@ -74,6 +74,7 @@ _.getTemplate = function(control) {
  * Helper for the thumbnail to use in the view.
  * @param {goog.ui.Component} control The component to use.
  * @private
+ * @return {string}
  */
 _.getThumbnail_ = function(control) {
   var thumb = control.getModel().getProp(smstb.ds.Record.Property.THUMBNAIL);
