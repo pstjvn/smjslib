@@ -2,6 +2,7 @@ include ../pstj/Makefile.include
 
 public_source_dirs := \
 ds \
+element \
 persistence \
 player \
 remotecontrol \

@@ -3,6 +3,7 @@
 goog.addDependency('../../../apps/smjs/ds/epg.js', ['smstb.ds.Epg.Cache', 'smstb.ds.Epg.Property'], ['pstj.ds.Cache'], false);
 goog.addDependency('../../../apps/smjs/ds/list.js', ['smstb.ds.List', 'smstb.ds.Loader'], ['goog.array', 'goog.asserts', 'goog.object', 'pstj.ds.List', 'smstb.ds.Record', 'smstb.transport.Transport'], false);
 goog.addDependency('../../../apps/smjs/ds/record.js', ['smstb.ds.Record'], ['pstj.ds.ListItem'], false);
+goog.addDependency('../../../apps/smjs/element/login.js', ['sm.element.Login', 'sm.element.LoginRenderer'], ['goog.log', 'goog.style', 'goog.ui.Component.State', 'goog.ui.registry', 'pstj.element.ErrorMsg', 'pstj.element.Form', 'pstj.element.FormRenderer', 'pstj.material.Button', 'pstj.material.Checkbox', 'pstj.material.Input', 'sm.template'], false);
 goog.addDependency('../../../apps/smjs/persistence/lang-cat.js', ['smstb.persistence.categories', 'smstb.persistence.languages'], ['smstb.persistence.List'], false);
 goog.addDependency('../../../apps/smjs/persistence/list.js', ['smstb.persistence.List'], ['goog.async.Delay', 'smstb.persistence.Storage'], false);
 goog.addDependency('../../../apps/smjs/persistence/storage.js', ['smstb.persistence.Storage'], ['goog.storage.Storage', 'goog.storage.mechanism.mechanismfactory'], false);

@@ -1,0 +1,31 @@
+// Provides the default styling for the forms.
+
+@import "../../pstj/less/element/form";
+@import "../../pstj/less/material/typography";
+@import "../../pstj/less/material/layout";
+
+@sm-form-checkbox-color: black;
+
+.sm-form {
+  width: 310px;
+  position: relative;
+  padding: 15px;
+  margin: 10px;
+
+  .material-checkbox-content {
+    .caption(@sm-form-checkbox-color);
+  }
+
+  .material-checkbox {
+    padding: 10px 0;
+  }
+
+  .material-input {
+    padding: 0;
+  }
+
+  .button-container {
+    &:extend(.horizontal);
+    &:extend(.end-justified);
+  }
+}

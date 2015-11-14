@@ -1,0 +1,60 @@
+{namespace sm.template}
+
+
+/** Default login form for sysmaster services */
+{template .Login}
+  <div is class="{css sm-login}" use-pointer>
+    <div>
+      {call pstj.templates.ErrorMsg /}
+    </div>
+    <div class="{css pstj-linklike}" style="display: none;" data-request="recovery">
+      {msg desc="Error displayed to user in form"}Forgot your password?{/msg}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Username is required{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Username{/msg}{/param}
+        {param required: true /}
+        {param name: 'username' /}
+        {param type: 'text' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Password is required{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Password{/msg}{/param}
+        {param required: true /}
+        {param name: 'password' /}
+        {param type: 'password' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Checkbox}
+        {param content kind="text"}
+          {msg desc="label on checkbox"}remember me{/msg}
+        {/param}
+      {/call}
+    </div>
+    <div class="{css sm-login-help}">{msg desc="hint for checkbox"}Stay logged in{/msg}</div>
+    <div class="{css sm-login-button-container}">
+      {call pstj.material.template.Button}
+        {param content kind="text"}
+          {msg desc="button label"}login{/msg}
+        {/param}
+        {param icon: 'none' /}
+        {param ink: true /}
+      {/call}
+    </div>
+    <div>
+      <span class="{css pstj-linklike}" data-request="register">
+        {msg desc="Link-like clickable hint in form"}Or register a new account{/msg}
+      </span>
+    </div>
+    <div is class="{css material-shadow} {css material-shadow-2}">
+      <div class="{css material-shadow-bottom}"></div>
+      <div class="{css material-shadow-top}"></div>
+    </div>
+  </div>
+{/template}
