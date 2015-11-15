@@ -4,6 +4,7 @@
 @import "../../pstj/less/material/typography";
 @import "../../pstj/less/material/layout";
 
+
 @sm-form-checkbox-color: black;
 
 // TODO: make width configurable
@@ -40,5 +41,17 @@
 
   .sm-form-help-info {
     .typography(#c5c5c5, 100, 12px);
+  }
+
+  select {
+    height: 35px;
+    margin: 5px 0 5px auto;
+    width: 70%;
+    display: table;
+  }
+
+  label {
+    float: left;
+    padding: 9px 0;
   }
 }
