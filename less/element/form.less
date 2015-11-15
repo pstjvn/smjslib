@@ -6,11 +6,19 @@
 
 @sm-form-checkbox-color: black;
 
+// TODO: make width configurable
+
 .sm-form {
   width: 310px;
   position: relative;
   padding: 15px;
   margin: 10px;
+
+  .linklike {
+    padding: 10px 0;
+    cursor: pointer;
+    .typography(#00f, 87, 11px, @typography-weight-light);
+  }
 
   .material-checkbox-content {
     .caption(@sm-form-checkbox-color);
@@ -22,10 +30,15 @@
 
   .material-input {
     padding: 0;
+    width: 100%;
   }
 
-  .button-container {
+  .sm-form-button-container {
     &:extend(.horizontal);
     &:extend(.end-justified);
+  }
+
+  .sm-form-help-info {
+    .typography(#c5c5c5, 100, 12px);
   }
 }

@@ -3,11 +3,11 @@
 
 /** Default login form for sysmaster services */
 {template .Login}
-  <div is class="{css sm-login}" use-pointer>
+  <div is class="{css sm-login} {css sm-form}" use-pointer>
     <div>
       {call pstj.templates.ErrorMsg /}
     </div>
-    <div class="{css pstj-linklike}" style="display: none;" data-request="recovery">
+    <div class="{css pstj-linklike}" style="display: none;" data-activity-switch="recovery">
       {msg desc="Error displayed to user in form"}Forgot your password?{/msg}
     </div>
     <div>
@@ -37,8 +37,8 @@
         {/param}
       {/call}
     </div>
-    <div class="{css sm-login-help}">{msg desc="hint for checkbox"}Stay logged in{/msg}</div>
-    <div class="{css sm-login-button-container}">
+    <div class="{css sm-form-help-info}">{msg desc="hint for checkbox"}Stay logged in{/msg}</div>
+    <div class="{css sm-form-button-container}">
       {call pstj.material.template.Button}
         {param content kind="text"}
           {msg desc="button label"}login{/msg}
@@ -48,9 +48,189 @@
       {/call}
     </div>
     <div>
-      <span class="{css pstj-linklike}" data-request="register">
+      <span class="{css pstj-linklike}" data-activity-switch="register">
         {msg desc="Link-like clickable hint in form"}Or register a new account{/msg}
       </span>
+    </div>
+    <div is class="{css material-shadow} {css material-shadow-2}">
+      <div class="{css material-shadow-bottom}"></div>
+      <div class="{css material-shadow-top}"></div>
+    </div>
+  </div>
+{/template}
+
+
+/** Template for the recovery of an account */
+{template .Recover}
+  <div is class="{css sm-recover}" use-pointer>
+    <div>
+      {call pstj.templates.ErrorMsg /}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Valid email is required{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}E-main{/msg}{/param}
+        {param required: true /}
+        {param name: 'email' /}
+        {param type: 'email' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div class="{css sm-form-button-container}">
+      {call pstj.material.template.Button}
+        {param content kind="text"}
+          {msg desc="button label"}request password{/msg}
+        {/param}
+        {param icon: 'none' /}
+        {param ink: true /}
+      {/call}
+    </div>
+    <div>
+      <span class="{css pstj-linklike}" data-activity-switch="login">
+        {msg desc="Link-like clickable hint in form"}Go back to login{/msg}
+      </span>
+    </div>
+    <div is class="{css material-shadow} {css material-shadow-2}">
+      <div class="{css material-shadow-bottom}"></div>
+      <div class="{css material-shadow-top}"></div>
+    </div>
+  </div>
+{/template}
+
+
+/** Registration form */
+{template .Register}
+  {@param registration: bool}
+  <div is class="{if registration != true}{css sm-profile} {/if}{css sm-register} {css sm-form}" use-pointer>
+    {if $registration}
+      <div>
+        <span class="{css pstj-linklike}" data-activity-switch="login">
+          {msg desc="Link-like clickable note to user"}Go back to login{/msg}
+        </span>
+      </div>
+      <div>
+        {call pstj.material.template.Input}
+          {param label kind="text"}{msg desc="input hint/placeholder"}Username{/msg}{/param}
+          {param error kind="text"}
+            {msg desc="Error when username is not filled in"}Username is required' {/msg}
+          {/param}
+          {param required: true /}
+          {param name: 'username' /}
+          {param type: 'text' /}
+          {param value: '' /}
+        {/call}
+      </div>
+    {/if}
+    <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Minimum 6 symbols{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Password{/msg}{/param}
+        {{param pattern: '^.{6,50}$'/}}
+        {param name: 'password' /}
+        {param type: 'password' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Minimum 6 symbols{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Repeat password{/msg}{/param}
+        {{param pattern: '^.{6,50}$' /}}
+        {param name: 'confirm_password' /}
+        {param type: 'password' /}
+        {param value: '' /}
+      {/call}
+    </div>
+        <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Minimum 4, letters only{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}First name{/msg}{/param}
+        {{param pattern: '^[A-Za-z ]{4,50}$' /}}
+        {param name: 'first_name' /}
+        {param type: 'text' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Minimum 4, letters only{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Last name{/msg}{/param}
+        {{param pattern: '^[A-Za-z ]{4,50}$' /}}
+        {param name: 'last_name' /}
+        {param type: 'text' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Company{/msg}{/param}
+        {param name: 'company' /}
+        {param type: 'text' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Valid email is required{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}E-mail{/msg}{/param}
+        {param required: true /}
+        {param name: 'email' /}
+        {param type: 'email' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param error kind="text"}{msg desc="Error on input"}Valid email only{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}PayPal E-mail{/msg}{/param}
+        {param name: 'paypal_email' /}
+        {param type: 'email' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Address{/msg}{/param}
+        {param name: 'address' /}
+        {param type: 'text' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call pstj.material.template.Input}
+        {param label kind="text"}{msg desc="input hint/placeholder"}City{/msg}{/param}
+        {param name: 'city' /}
+        {param type: 'text' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      <label>{msg desc=""}State{/msg}:</label>
+      <select name="state">
+        {call pstj.select.USAStates /}
+      </select>
+    </div>
+    <div>
+      <label>{msg desc=""}Country{/msg}:</label>
+      <select name="country">
+        {call pstj.select.Countries /}
+      </select>
+    </div>
+    <div>
+      {call pstj.templates.ErrorMsg /}
+    </div>
+    <div class="{css sm-form-button-container}">
+      {call pstj.material.template.Button}
+        {param content kind="text"}
+          {if $registration}
+            {msg desc="Update button label"}Update{/msg}
+          {else}
+            {msg desc="Register button label"}Register{/msg}
+          {/if}
+        {/param}
+        {param icon: 'none' /}
+        {param ink: true /}
+      {/call}
     </div>
     <div is class="{css material-shadow} {css material-shadow-2}">
       <div class="{css material-shadow-bottom}"></div>

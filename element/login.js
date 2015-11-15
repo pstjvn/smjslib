@@ -19,6 +19,7 @@ goog.require('pstj.element.FormRenderer');
 goog.require('pstj.material.Button');
 goog.require('pstj.material.Checkbox');
 goog.require('pstj.material.Input');
+goog.require('pstj.material.Shadow');
 goog.require('sm.template');
 
 
@@ -164,6 +165,7 @@ sm.element.LoginRenderer = goog.defineClass(pstj.element.FormRenderer, {
     CSS_CLASS: goog.getCssName('sm-login')
   }
 });
+goog.addSingletonGetter(sm.element.LoginRenderer);
 
 // Register for default renderer.
 goog.ui.registry.setDefaultRenderer(sm.element.Login,
