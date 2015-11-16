@@ -11,7 +11,6 @@ goog.provide('sm.element.LoginRenderer');
 
 goog.require('goog.log');
 goog.require('goog.style');
-goog.require('goog.ui.Component.State');
 goog.require('goog.ui.registry');
 goog.require('pstj.element.ErrorMsg');
 goog.require('pstj.element.Form');
