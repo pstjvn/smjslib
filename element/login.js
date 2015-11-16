@@ -52,7 +52,8 @@ sm.element.Login = goog.defineClass(pstj.element.Form, {
    */
   isValid: function() {
     return this.getRenderer().getUsernameElement(this).isValid() &&
-        this.getRenderer().getPasswordElement(this).isValid();
+        this.getRenderer().getPasswordElement(this).isValid() &&
+        !goog.string.isEmptyString(this.getUsername());
   },
 
   /**
