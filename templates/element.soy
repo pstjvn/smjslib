@@ -5,9 +5,12 @@
 {template .Login}
   <div is class="{css sm-login} {css sm-form}" use-pointer>
     <div>
-      {call pstj.templates.ErrorMsg /}
+      {call pstj.templates.ErrorMsg}
+        {param auto: true /}
+        {param delay: 30000 /}
+      {/call}
     </div>
-    <div class="{css pstj-linklike}" style="display: none;" data-activity-switch="recovery">
+    <div class="{css pstj-linklike}" style="display: none;" data-activity-switch="recover">
       {msg desc="Error displayed to user in form"}Forgot your password?{/msg}
     </div>
     <div>
@@ -62,14 +65,14 @@
 
 /** Template for the recovery of an account */
 {template .Recover}
-  <div is class="{css sm-recover}" use-pointer>
+  <div is class="{css sm-recover} {css sm-form}" use-pointer>
     <div>
       {call pstj.templates.ErrorMsg /}
     </div>
     <div>
       {call pstj.material.template.Input}
         {param error kind="text"}{msg desc="Error on input"}Valid email is required{/msg}{/param}
-        {param label kind="text"}{msg desc="input hint/placeholder"}E-main{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}E-mail{/msg}{/param}
         {param required: true /}
         {param name: 'email' /}
         {param type: 'email' /}

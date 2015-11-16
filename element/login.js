@@ -96,6 +96,22 @@ sm.element.Login = goog.defineClass(pstj.element.Form, {
    */
   showRecoveryLink: function(enable) {
     this.getRenderer().showRecoveryLink(this, enable);
+  },
+
+  /** @override */
+  setErrorMessage: function(msg) {
+    goog.base(this, 'setErrorMessage', msg);
+    if (!goog.isNull(msg)) {
+      this.showRecoveryLink(true);
+    } else {
+      this.showRecoveryLink(false);
+    }
+  },
+
+  /** @override */
+  clear: function() {
+    goog.base(this, 'clear');
+    this.getRenderer().getKeepCredentialsElement(this).setChecked(false);
   }
 });
 
