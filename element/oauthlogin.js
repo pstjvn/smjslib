@@ -1,10 +1,10 @@
 goog.provide('sm.element.OAuthLogin');
 goog.provide('sm.element.OAuthLoginRenderer');
 
-goog.require('goog.functions');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.registry');
 goog.require('pstj.app.Facebook');
+goog.require('pstj.app.Google');
 goog.require('pstj.control.Control');
 goog.require('pstj.ds.oauth');
 goog.require('pstj.element.Form');
@@ -40,6 +40,16 @@ sm.element.OAuthLogin = goog.defineClass(pstj.element.Form, {
   /** @override */
   enterDocument: function() {
     goog.base(this, 'enterDocument');
+    // When the FB SDK is ready - enable the facebook button.
+    pstj.app.Facebook.getInstance().getReadyPromise().then(function() {
+      this.getRenderer().getFacebookButton(this).setEnabled(true);
+    }, null, this);
+    // Get the initial user promise and if it resolves tell the all that we
+    // have a valid user.
+    pstj.app.Facebook.getInstance().getUserPromise().then(function(user) {
+      this.onHavingUser(user);
+    }, null, this);
+    // Listen for action events from enabled social buttons.
     this.getHandler().listen(this, goog.ui.Component.EventType.ACTION,
         this.handleActionButton);
   },
@@ -54,10 +64,27 @@ sm.element.OAuthLogin = goog.defineClass(pstj.element.Form, {
     var action = goog.asserts.assertInstanceof(e.target, pstj.material.Button)
         .getAction();
     if (action == 'facebook-oauth') {
-      pstj.app.Facebook.getInstance().login().then(function(user) {
-        this.controller_.push(pstj.ds.oauth.Topic, user);
-      }, goog.functions.NULL);
+      pstj.app.Facebook.getInstance().login().then(this.onHavingUser, null,
+          this);
     }
+  },
+
+  /**
+   * User has been received.
+   * @param {!pstj.ds.oauth.User} user
+   * @protected
+   */
+  onHavingUser: function(user) {
+    this.controller_.push(pstj.ds.oauth.Topic, user);
+  },
+
+  /**
+   * @override
+   * @return {!sm.element.OAuthLoginRenderer}
+   */
+  getRenderer: function() {
+    return goog.asserts.assertInstanceof(goog.base(this, 'getRenderer'),
+        sm.element.OAuthLoginRenderer);
   }
 });
 
@@ -76,6 +103,24 @@ sm.element.OAuthLoginRenderer = goog.defineClass(pstj.element.FormRenderer, {
   /** @override */
   getTemplate: function(model) {
     return sm.template.OAuthLogin(model);
+  },
+
+  /**
+   * @param {sm.element.OAuthLogin} inst
+   * @return {!pstj.material.Button}
+   */
+  getFacebookButton: function(inst) {
+    return goog.asserts.assertInstanceof(inst.getChildAt(1),
+        pstj.material.Button);
+  },
+
+  /**
+   * @param {sm.element.OAuthLogin} inst
+   * @return {!pstj.material.Button}
+   */
+  getGoogleButton: function(inst) {
+    return goog.asserts.assertInstanceof(inst.getChildAt(0),
+        pstj.material.Button);
   },
 
   statics: {
