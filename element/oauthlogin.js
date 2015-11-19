@@ -1,7 +1,12 @@
 goog.provide('sm.element.OAuthLogin');
 goog.provide('sm.element.OAuthLoginRenderer');
 
+goog.require('goog.functions');
+goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.registry');
+goog.require('pstj.app.Facebook');
+goog.require('pstj.control.Control');
+goog.require('pstj.ds.oauth');
 goog.require('pstj.element.Form');
 goog.require('pstj.element.FormRenderer');
 goog.require('pstj.material.Button');
@@ -21,7 +26,38 @@ sm.element.OAuthLogin = goog.defineClass(pstj.element.Form, {
    */
   constructor: function(opt_content, opt_renderer, opt_domHelper) {
     pstj.element.Form.call(this, opt_content, opt_renderer, opt_domHelper);
+    /**
+     * We need a control instance to be able to publish on the app bus when
+     * we have an authenticated user.
+     *
+     * @private
+     * @type {pstj.control.Control}
+     */
+    this.controller_ = new pstj.control.Control(this);
     this.setAllowTextSelection(false);
+  },
+
+  /** @override */
+  enterDocument: function() {
+    goog.base(this, 'enterDocument');
+    this.getHandler().listen(this, goog.ui.Component.EventType.ACTION,
+        this.handleActionButton);
+  },
+
+  /**
+   * Handle button presses.
+   * @param {goog.events.Event} e
+   * @protected
+   */
+  handleActionButton: function(e) {
+    e.stopPropagation();
+    var action = goog.asserts.assertInstanceof(e.target, pstj.material.Button)
+        .getAction();
+    if (action == 'facebook-oauth') {
+      pstj.app.Facebook.getInstance().login().then(function(user) {
+        this.controller_.push(pstj.ds.oauth.Topic, user);
+      }, goog.functions.NULL);
+    }
   }
 });
 
@@ -48,6 +84,7 @@ sm.element.OAuthLoginRenderer = goog.defineClass(pstj.element.FormRenderer, {
   }
 });
 goog.addSingletonGetter(sm.element.LoginRenderer);
+
 
 // Register for default renderer.
 goog.ui.registry.setDefaultRenderer(sm.element.OAuthLogin,
