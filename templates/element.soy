@@ -1,11 +1,15 @@
 {namespace sm.template}
 
 
+{alias pstj.templates as pt}
+{alias pstj.material.template as material}
+
+
 /** Default login form for sysmaster services */
 {template .Login}
   <div is class="{css sm-login} {css sm-form}" use-pointer>
     <div>
-      {call pstj.templates.ErrorMsg}
+      {call pt.ErrorMsg}
         {param auto: true /}
         {param delay: 30000 /}
       {/call}
@@ -14,7 +18,7 @@
       {msg desc="Error displayed to user in form"}Forgot your password?{/msg}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Username is required{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}Username{/msg}{/param}
         {param required: true /}
@@ -24,7 +28,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Password is required{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}Password{/msg}{/param}
         {param required: true /}
@@ -34,7 +38,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Checkbox}
+      {call material.Checkbox}
         {param content kind="text"}
           {msg desc="label on checkbox"}remember me{/msg}
         {/param}
@@ -42,7 +46,7 @@
     </div>
     <div class="{css sm-form-help-info}">{msg desc="hint for checkbox"}Stay logged in{/msg}</div>
     <div class="{css sm-form-button-container}">
-      {call pstj.material.template.Button}
+      {call material.Button}
         {param content kind="text"}
           {msg desc="button label"}login{/msg}
         {/param}
@@ -63,14 +67,44 @@
 {/template}
 
 
+/** Template for an oauth login */
+{template .OAuthLogin}
+  <div is class="{css sm-oauth-login} {css sm-form}">
+    <div class="{css sm-oauth-login-info}">{msg desc=""}Log in using your social media account{/msg}</div>
+    <div class="{css sm-form-button-row}">
+      {call material.Button}
+        {param content kind="text"}
+          {msg desc="button label"}Google{/msg}
+        {/param}
+        {param icon: 'google' /}
+        {param ink: true /}
+        {param action: 'google-oauth' /}
+      {/call}
+      {call material.Button}
+        {param content kind="text"}
+          {msg desc="button label"}Facebook{/msg}
+        {/param}
+        {param icon: 'facebook' /}
+        {param ink: true /}
+        {param action: 'facebook-oauth' /}
+      {/call}
+    </div>
+    <div is class="{css material-shadow} {css material-shadow-2}">
+      <div class="{css material-shadow-bottom}"></div>
+      <div class="{css material-shadow-top}"></div>
+    </div>
+  </div>
+{/template}
+
+
 /** Template for the recovery of an account */
 {template .Recover}
   <div is class="{css sm-recover} {css sm-form}" use-pointer>
     <div>
-      {call pstj.templates.ErrorMsg /}
+      {call pt.ErrorMsg /}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Valid email is required{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}E-mail{/msg}{/param}
         {param required: true /}
@@ -80,7 +114,7 @@
       {/call}
     </div>
     <div class="{css sm-form-button-container}">
-      {call pstj.material.template.Button}
+      {call material.Button}
         {param content kind="text"}
           {msg desc="button label"}request password{/msg}
         {/param}
@@ -112,7 +146,7 @@
         </span>
       </div>
       <div>
-        {call pstj.material.template.Input}
+        {call material.Input}
           {param label kind="text"}{msg desc="input hint/placeholder"}Username{/msg}{/param}
           {param error kind="text"}
             {msg desc="Error when username is not filled in"}Username is required' {/msg}
@@ -125,7 +159,7 @@
       </div>
     {/if}
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Minimum 6 symbols{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}Password{/msg}{/param}
         {{param pattern: '^.{6,50}$'/}}
@@ -135,7 +169,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Minimum 6 symbols{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}Repeat password{/msg}{/param}
         {{param pattern: '^.{6,50}$' /}}
@@ -145,7 +179,7 @@
       {/call}
     </div>
         <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Minimum 4, letters only{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}First name{/msg}{/param}
         {{param pattern: '^[A-Za-z ]{4,50}$' /}}
@@ -155,7 +189,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Minimum 4, letters only{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}Last name{/msg}{/param}
         {{param pattern: '^[A-Za-z ]{4,50}$' /}}
@@ -165,7 +199,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param label kind="text"}{msg desc="input hint/placeholder"}Company{/msg}{/param}
         {param name: 'company' /}
         {param type: 'text' /}
@@ -173,7 +207,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Valid email is required{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}E-mail{/msg}{/param}
         {param required: true /}
@@ -183,7 +217,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Valid email only{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}PayPal E-mail{/msg}{/param}
         {param name: 'paypal_email' /}
@@ -192,7 +226,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param label kind="text"}{msg desc="input hint/placeholder"}Address{/msg}{/param}
         {param name: 'address' /}
         {param type: 'text' /}
@@ -200,7 +234,7 @@
       {/call}
     </div>
     <div>
-      {call pstj.material.template.Input}
+      {call material.Input}
         {param label kind="text"}{msg desc="input hint/placeholder"}City{/msg}{/param}
         {param name: 'city' /}
         {param type: 'text' /}
@@ -220,10 +254,10 @@
       </select>
     </div>
     <div>
-      {call pstj.templates.ErrorMsg /}
+      {call pt.ErrorMsg /}
     </div>
     <div class="{css sm-form-button-container}">
-      {call pstj.material.template.Button}
+      {call material.Button}
         {param content kind="text"}
           {if $registration}
             {msg desc="Register button label"}Register{/msg}

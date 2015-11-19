@@ -21,6 +21,13 @@
     .typography(#00f, 87, 11px, @typography-weight-light);
   }
 
+  &-button-row {
+    &:extend(.horizontal);
+    & > .material-button {
+      &:extend(.flex);
+    }
+  }
+
   .material-checkbox-content {
     .caption(@sm-form-checkbox-color);
   }

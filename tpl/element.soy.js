@@ -39,6 +39,21 @@ if (goog.DEBUG) {
  * @return {!soydata.SanitizedHtml}
  * @suppress {checkTypes}
  */
+sm.template.OAuthLogin = function(opt_data, opt_ignored, opt_ijData) {
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div is class="' + goog.getCssName('sm-oauth-login') + ' ' + goog.getCssName('sm-form') + '"><div class="' + goog.getCssName('sm-oauth-login-info') + '">Log in using your social media account</div><div class="' + goog.getCssName('sm-form-button-row') + '">' + soy.$$escapeHtml(pstj.material.template.Button({content: soydata.$$markUnsanitizedTextForInternalBlocks('Google'), icon: 'google', ink: true, action: 'google-oauth'}, null, opt_ijData)) + soy.$$escapeHtml(pstj.material.template.Button({content: soydata.$$markUnsanitizedTextForInternalBlocks('Facebook'), icon: 'facebook', ink: true, action: 'facebook-oauth'}, null, opt_ijData)) + '</div><div is class="' + goog.getCssName('material-shadow') + ' ' + goog.getCssName('material-shadow-2') + '"><div class="' + goog.getCssName('material-shadow-bottom') + '"></div><div class="' + goog.getCssName('material-shadow-top') + '"></div></div></div>');
+};
+if (goog.DEBUG) {
+  sm.template.OAuthLogin.soyTemplateName = 'sm.template.OAuthLogin';
+}
+
+
+/**
+ * @param {Object<string, *>=} opt_data
+ * @param {(null|undefined)=} opt_ignored
+ * @param {Object<string, *>=} opt_ijData
+ * @return {!soydata.SanitizedHtml}
+ * @suppress {checkTypes}
+ */
 sm.template.Recover = function(opt_data, opt_ignored, opt_ijData) {
   return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div is class="' + goog.getCssName('sm-recover') + ' ' + goog.getCssName('sm-form') + '" use-pointer><div>' + soy.$$escapeHtml(pstj.templates.ErrorMsg(null, null, opt_ijData)) + '</div><div>' + soy.$$escapeHtml(pstj.material.template.Input({error: soydata.$$markUnsanitizedTextForInternalBlocks('Valid email is required'), label: soydata.$$markUnsanitizedTextForInternalBlocks('E-mail'), required: true, name: 'email', type: 'email', value: ''}, null, opt_ijData)) + '</div><div class="' + goog.getCssName('sm-form-button-container') + '">' + soy.$$escapeHtml(pstj.material.template.Button({content: soydata.$$markUnsanitizedTextForInternalBlocks('request password'), icon: 'none', ink: true}, null, opt_ijData)) + '</div><div><span class="' + goog.getCssName('pstj-linklike') + '" data-activity-switch="login">Go back to login</span></div><div is class="' + goog.getCssName('material-shadow') + ' ' + goog.getCssName('material-shadow-2') + '"><div class="' + goog.getCssName('material-shadow-bottom') + '"></div><div class="' + goog.getCssName('material-shadow-top') + '"></div></div></div>');
 };
