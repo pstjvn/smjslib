@@ -14,8 +14,16 @@ goog.require('sm.template');
 
 /** @extends {pstj.element.Form} */
 sm.element.Register = goog.defineClass(pstj.element.Form, {
-  constructor: function() {
-    pstj.element.Form.call(this);
+  /**
+   * @param {goog.ui.ControlContent=} opt_content Text caption or DOM structure
+   *     to display as the content of the control (if any).
+   * @param {goog.ui.ControlRenderer=} opt_renderer Renderer used to render or
+   *     decorate the component; defaults to {@link goog.ui.ControlRenderer}.
+   * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
+   *     document interaction.
+   */
+  constructor: function(opt_content, opt_renderer, opt_domHelper) {
+    pstj.element.Form.call(this, opt_content, opt_renderer, opt_domHelper);
     this.setUsePointerAgent(true);
   },
 
