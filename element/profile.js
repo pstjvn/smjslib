@@ -1,8 +1,7 @@
-'use strict';
-
 goog.provide('sm.element.Profile');
 goog.provide('sm.element.ProfileRenderer');
 
+goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.registry');
 goog.require('sm.element.Register');
 goog.require('sm.element.RegisterRenderer');
@@ -10,7 +9,7 @@ goog.require('sm.template');
 
 
 /** @extends {sm.element.Register} */
-sm.element.Profile = class extends sm.element.Register {
+sm.element.Profile = goog.defineClass(sm.element.Register, {
   /**
    * @param {goog.ui.ControlContent=} opt_content Text caption or DOM structure
    *     to display as the content of the control (if any).
@@ -19,31 +18,39 @@ sm.element.Profile = class extends sm.element.Register {
    * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
    *     document interaction.
    */
-  constructor(opt_content, opt_renderer, opt_domHelper) {
-    super(opt_content, opt_renderer, opt_domHelper);
+  constructor: function(opt_content, opt_renderer, opt_domHelper) {
+    sm.element.Register.call(this, opt_content, opt_renderer, opt_domHelper);
+    this.setUseNGTemplateSyntax(true);
+  },
+
+  /** @override */
+  enterDocument: function() {
+    goog.base(this, 'enterDocument');
+    this.getHandler().listen(this, goog.ui.Component.EventType.ACTION,
+        this.updateModelFromElements);
   }
 
-};
+});
 
 
 /** @extends {sm.element.RegisterRenderer} */
-sm.element.ProfileRenderer = class extends sm.element.RegisterRenderer {
-  constructor() {
-    super();
-  }
+sm.element.ProfileRenderer = goog.defineClass(sm.element.RegisterRenderer, {
+  constructor: function() {
+    sm.element.RegisterRenderer.call(this);
+  },
 
   /** @override */
-  getCssClass() {
+  getCssClass: function() {
     return sm.element.ProfileRenderer.CSS_CLASS;
-  }
+  },
 
   /** @override */
-  getTemplate() {
+  getTemplate: function() {
     return sm.template.Register({
       registration: false
     });
   }
-};
+});
 
 
 /** @const {string} */

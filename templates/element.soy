@@ -175,7 +175,7 @@
         {param error kind="text"}{msg desc="Error on input"}Minimum 6 symbols{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}Repeat password{/msg}{/param}
         {{param pattern: '^.{6,50}$' /}}
-        {param name: 'confirm_password' /}
+        {param name: 'cpassword' /}
         {param type: 'password' /}
         {param value: '' /}
       {/call}
@@ -185,7 +185,7 @@
         {param error kind="text"}{msg desc="Error on input"}Minimum 4, letters only{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}First name{/msg}{/param}
         {{param pattern: '^[A-Za-z ]{4,50}$' /}}
-        {param name: 'first_name' /}
+        {param name: 'fname' /}
         {param type: 'text' /}
         {param value: '' /}
       {/call}
@@ -195,7 +195,7 @@
         {param error kind="text"}{msg desc="Error on input"}Minimum 4, letters only{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}Last name{/msg}{/param}
         {{param pattern: '^[A-Za-z ]{4,50}$' /}}
-        {param name: 'last_name' /}
+        {param name: 'lname' /}
         {param type: 'text' /}
         {param value: '' /}
       {/call}
@@ -222,7 +222,7 @@
       {call material.Input}
         {param error kind="text"}{msg desc="Error on input"}Valid email only{/msg}{/param}
         {param label kind="text"}{msg desc="input hint/placeholder"}PayPal E-mail{/msg}{/param}
-        {param name: 'paypal_email' /}
+        {param name: 'pp_email' /}
         {param type: 'email' /}
         {param value: '' /}
       {/call}
