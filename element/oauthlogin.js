@@ -44,9 +44,15 @@ sm.element.OAuthLogin = goog.defineClass(pstj.element.Form, {
     pstj.app.Facebook.getInstance().getReadyPromise().then(function() {
       this.getRenderer().getFacebookButton(this).setEnabled(true);
     }, null, this);
+    pstj.app.Google.getInstance().getReadyPromise().then(function() {
+      this.getRenderer().getGoogleButton(this).setEnabled(true);
+    }, null, this);
     // Get the initial user promise and if it resolves tell the all that we
     // have a valid user.
-    pstj.app.Facebook.getInstance().getUserPromise().then(function(user) {
+    goog.Promise.firstFulfilled([
+      pstj.app.Facebook.getInstance().getUserPromise(),
+      pstj.app.Google.getInstance().getUserPromise()
+    ]).then(function(user) {
       this.onHavingUser(user);
     }, null, this);
     // Listen for action events from enabled social buttons.
@@ -66,6 +72,9 @@ sm.element.OAuthLogin = goog.defineClass(pstj.element.Form, {
     if (action == 'facebook-oauth') {
       pstj.app.Facebook.getInstance().login().then(this.onHavingUser, null,
           this);
+    }
+    if (action == 'google-oauth') {
+      pstj.app.Google.getInstance().login().then(this.onHavingUser, null, this);
     }
   },
 
