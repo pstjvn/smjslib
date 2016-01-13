@@ -48,6 +48,27 @@ sm.element.Register = goog.defineClass(pstj.element.Form, {
           this.querySelector('[name="state"]'));
       s.value = /** @type {HTMLOptionElement} */(s.options.item(0)).value;
     }
+  },
+
+  /** @override */
+  isValid: function() {
+    var valid = true;
+    this.forEachChild(function(child) {
+      if (valid) {
+        if (child instanceof pstj.material.InputBase) {
+          valid = child.isValid();
+        }
+      }
+    });
+    return valid;
+  },
+
+  /**
+   * Expose the form as a model.
+   * @param  {pstj.ds.DtoBase} model
+   */
+  updateModel: function(model) {
+    this.updateModelFromElements(model);
   }
 });
 

@@ -229,6 +229,15 @@
     </div>
     <div>
       {call material.Input}
+        {param error kind="text"}{msg desc="Error on input"}Valid phone number is require{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Phone number{/msg}{/param}
+        {param name: 'phone' /}
+        {param type: 'tel' /}
+        {param value: '' /}
+      {/call}
+    </div>
+    <div>
+      {call material.Input}
         {param label kind="text"}{msg desc="input hint/placeholder"}Address{/msg}{/param}
         {param name: 'address' /}
         {param type: 'text' /}
