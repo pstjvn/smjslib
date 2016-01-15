@@ -61,14 +61,6 @@ sm.element.Register = goog.defineClass(pstj.element.Form, {
       }
     });
     return valid;
-  },
-
-  /**
-   * Expose the form as a model.
-   * @param  {pstj.ds.DtoBase} model
-   */
-  updateModel: function(model) {
-    this.updateModelFromElements(model);
   }
 });
 
