@@ -107,11 +107,11 @@
     </div>
     <div>
       {call material.Input}
-        {param error kind="text"}{msg desc="Error on input"}Valid email is required{/msg}{/param}
-        {param label kind="text"}{msg desc="input hint/placeholder"}E-mail{/msg}{/param}
+        {param error kind="text"}{msg desc="Error on input"}Username is required{/msg}{/param}
+        {param label kind="text"}{msg desc="input hint/placeholder"}Username{/msg}{/param}
         {param required: true /}
-        {param name: 'email' /}
-        {param type: 'email' /}
+        {param name: 'username' /}
+        {param type: 'text' /}
         {param value: '' /}
       {/call}
     </div>
@@ -122,6 +122,7 @@
         {/param}
         {param icon: 'none' /}
         {param ink: true /}
+        {param action: 'recover' /}
       {/call}
     </div>
     <div>
