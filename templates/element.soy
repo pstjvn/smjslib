@@ -160,6 +160,11 @@
           {param value: '' /}
         {/call}
       </div>
+    {else}
+      <div>
+        <span>{msg desc="label"}Account ID:{/msg}</span>{sp}
+        <span data-ng-model="acctid"></span>
+      </div>
     {/if}
     <div>
       {call material.Input}
