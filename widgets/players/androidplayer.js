@@ -34,5 +34,5 @@ smstb.widget.AndroidPlayer.prototype.setModel = function(url) {
  * trigger the intent for playback on the Android's default browser.
  * Note that intent is not detected by firefox in this case!
  */
-goog.define('smstb.widget.AndroidPlayer.PREFIX',
+smstb.widget.AndroidPlayer.PREFIX = goog.define('smstb.widget.AndroidPlayer.PREFIX',
     'smiptv://sysmaster.com/webapp/android/iptvapp.html?url=');
